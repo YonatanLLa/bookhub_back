@@ -42,10 +42,12 @@ const capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const {  } = sequelize.models;
+const { Book, Author } = sequelize.models;
+
+//relaciones con los modelos
+Author.hasMany(Book);
+Book.belongsTo(Author);
 */
-
-
 module.exports = {
 	sequelize,
 	...sequelize.models,
