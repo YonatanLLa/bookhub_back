@@ -42,7 +42,7 @@ const capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { User, Book, Author, Category, Buy } = sequelize.models;
+const { User, Book, Author, Gender, Buy } = sequelize.models;
 
 //relaciones con los modelos
 
@@ -56,8 +56,8 @@ Book.belongsTo(User, {foreignKey: 'venta_user_id',});
 Author.hasMany(Book);
 Book.belongsTo(Author);
 
-Category.hasMany(Book);
-Book.belongsTo(Category);
+Gender.hasMany(Book);
+Book.belongsTo(Gender);
 
 // relacion mucho a mucho
 Book.belongsToMany(Buy, { through: 'BookBuy' });
