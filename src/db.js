@@ -23,7 +23,7 @@ const modelDefiners = [];
 //* hace un require a todos los archivos adentro de la carpeta Models
 //* este fragmento de codigo lo saque de db.js que nos dieron en el pi
 
-/*fs.readdirSync(path.join(__dirname, "/Models"))
+fs.readdirSync(path.join(__dirname, "/Models"))
 	.filter(
 		(file) =>
 			file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
@@ -42,12 +42,27 @@ const capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Book, Author } = sequelize.models;
+const { User, Book, Author, Category, Buy } = sequelize.models;
 
 //relaciones con los modelos
+
+// relacion uno a mucho
+User.hasMany(Buy);
+Buy.belongsTo(User);
+
+User.hasMany(Book, {foreignKey: 'venta_user_id',});
+Book.belongsTo(User, {foreignKey: 'venta_user_id',});
+
 Author.hasMany(Book);
 Book.belongsTo(Author);
-*/
+
+Category.hasMany(Book);
+Book.belongsTo(Category);
+
+// relacion mucho a mucho
+Book.belongsToMany(Buy, { through: 'BookBuy' });
+Buy.belongsToMany(Book, { through: 'BookBuy' });
+
 module.exports = {
 	sequelize,
 	...sequelize.models,
