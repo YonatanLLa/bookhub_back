@@ -3,9 +3,14 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 
-const DB_UL = process.env.DB_URL;
+const { 
+PGDATABASE,
+PGHOST,
+PGPASSWORD,
+PGUSER,
+PGPORT } = process.env;
 
-const sequelize = new Sequelize(DB_UL, {
+const sequelize = new Sequelize( `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`, {
 	logging: false,
 	native: false,
 });
@@ -37,9 +42,26 @@ const capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const {  } = sequelize.models;
+const { User, Book, Author, Category, Buy } = sequelize.models;
 
+//relaciones con los modelos
 
+// relacion uno a mucho
+User.hasMany(Buy);
+Buy.belongsTo(User);
+
+User.hasMany(Book, {foreignKey: 'venta_user_id',});
+Book.belongsTo(User, {foreignKey: 'venta_user_id',});
+
+Author.hasMany(Book);
+Book.belongsTo(Author);
+
+Category.hasMany(Book);
+Book.belongsTo(Category);
+
+// relacion mucho a mucho
+Book.belongsToMany(Buy, { through: 'BookBuy' });
+Buy.belongsToMany(Book, { through: 'BookBuy' });
 
 module.exports = {
 	sequelize,
