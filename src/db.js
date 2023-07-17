@@ -3,9 +3,14 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 
-const DB_UL = process.env.DB_URL;
+const { 
+PGDATABASE,
+PGHOST,
+PGPASSWORD,
+PGUSER,
+PGPORT } = process.env;
 
-const sequelize = new Sequelize(DB_UL, {
+const sequelize = new Sequelize( `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`, {
 	logging: false,
 	native: false,
 });
@@ -18,7 +23,7 @@ const modelDefiners = [];
 //* hace un require a todos los archivos adentro de la carpeta Models
 //* este fragmento de codigo lo saque de db.js que nos dieron en el pi
 
-fs.readdirSync(path.join(__dirname, "/Models"))
+/*fs.readdirSync(path.join(__dirname, "/Models"))
 	.filter(
 		(file) =>
 			file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
@@ -38,7 +43,7 @@ const capsEntries = entries.map((entry) => [
 sequelize.models = Object.fromEntries(capsEntries);
 
 const {  } = sequelize.models;
-
+*/
 
 
 module.exports = {
