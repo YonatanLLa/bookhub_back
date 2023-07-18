@@ -2,6 +2,7 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
+// const Reviews = require("./models/Reviews");
 
 const { 
 PGDATABASE,
@@ -42,13 +43,17 @@ const capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { User, Book, Author, Gender, Buy } = sequelize.models;
+const { User, Book, Author, Gender, Buy, Reviews } = sequelize.models;
 
 //relaciones con los modelos
 
 // relacion uno a mucho
 User.hasMany(Buy);
 Buy.belongsTo(User);
+
+User.hasMany(Reviews);
+Reviews.belongsTo(User);
+
 
 User.hasMany(Book, {foreignKey: 'venta_user_id',});
 Book.belongsTo(User, {foreignKey: 'venta_user_id',});
@@ -62,6 +67,9 @@ Book.belongsTo(Gender);
 // relacion mucho a mucho
 Book.belongsToMany(Buy, { through: 'BookBuy' });
 Buy.belongsToMany(Book, { through: 'BookBuy' });
+
+Book.belongsToMany(Reviews, { through: 'BookReview' });
+Reviews.belongsToMany(Book, { through: 'BookReview' });
 
 module.exports = {
 	sequelize,
