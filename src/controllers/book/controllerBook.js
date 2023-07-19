@@ -1,7 +1,9 @@
 const { Book, Author, Gender } = require("../../db");
 
 const getAllBook = async () => {
-	const bookAll = await Book.findAll();
+	const bookAll = await Book.findAll({
+		include:[ { model: Author, attributes: ["id","name"]}, {model: Gender, attributes: ["id","name"]}]
+	});
 	if (!bookAll) {
 		throw new Error("No book found");
 	}
@@ -14,7 +16,9 @@ const postControllerBook = async (
 	description,
 	price,
 	available,
-	releaseDate
+	releaseDate,
+	GenderId,
+	AuthorId
 ) => {
 	if (!name || !image || !description || !price || !available || !releaseDate) {
 		throw new Error("All fields are required");
@@ -26,13 +30,17 @@ const postControllerBook = async (
 		price,
 		available,
 		releaseDate,
-	});
-	
-
+	});	
+	await book.setGender(GenderId);
+	await book.setAuthor(AuthorId);
 	return book;
+};
+const deleteControllerBook = async (id) => {
+	
 };
 
 module.exports = {
 	getAllBook,
 	postControllerBook,
+	deleteControllerBook
 };
