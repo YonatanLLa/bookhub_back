@@ -1,7 +1,9 @@
 const { Book, Author, Gender } = require("../../db");
 
 const getAllBook = async () => {
-	const bookAll = await Book.findAll();
+	const bookAll = await Book.findAll({
+		include:[ { model: Author, attributes: ["id","name"]}, {model: Gender, attributes: ["id","name"]}]
+	});
 	if (!bookAll) {
 		throw new Error("No book found");
 	}
