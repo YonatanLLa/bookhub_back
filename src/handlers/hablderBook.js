@@ -1,0 +1,29 @@
+const { getAllBook, postControllerBook } = require("../controllers/controllerBook");
+
+const getHandlerBook = async (req, res) => {
+    try {
+        const books = await getAllBook();
+        res.status(200).json(books);
+    } catch (error) {
+        res.status(500).json(error);
+        console.log(error);
+    }
+};
+const postHandlerBook = async (req, res) => {
+    const { name, image, description, price, available, releaseDate } = req.body;
+    
+    const book = await postControllerBook(
+        name,
+        image,
+        description,
+        price,
+        available,
+        releaseDate
+    )
+    res.status(201).json(book);
+}
+
+module.exports = {
+    getHandlerBook,
+    postHandlerBook
+};
