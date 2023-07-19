@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { getHandlerBook, postHandlerBook } = require("../handlers/hablderBook");
+const { getHandlerBook, postHandlerBook } = require("../handles/hablderBook");
 
 const routesBook = Router();
 
