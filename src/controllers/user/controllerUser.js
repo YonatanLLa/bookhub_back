@@ -9,7 +9,7 @@ const postControllerUser = async (name, email, passwordKey) => {
 		throw new Error("Password is required");
 	}
 
-    const hashedPassword = await bcrypt.hash(passwordKey, 12);
+	const hashedPassword = await bcrypt.hash(passwordKey, 12);
 
 	const [user, created] = await User.findOrCreate({
 		where: {

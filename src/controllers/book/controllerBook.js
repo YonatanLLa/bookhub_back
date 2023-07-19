@@ -35,12 +35,9 @@ const postControllerBook = async (
 	await book.setAuthor(AuthorId);
 	return book;
 };
-const deleteControllerBook = async (id) => {
-	
-};
+
 
 module.exports = {
 	getAllBook,
 	postControllerBook,
-	deleteControllerBook
 };
