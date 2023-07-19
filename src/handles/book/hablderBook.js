@@ -13,7 +13,7 @@ const getHandlerBook = async (req, res) => {
 	}
 };
 const postHandlerBook = async (req, res) => {
-	const { name, image, description, price, available, releaseDate } = req.body;
+	const { name, image, description, price, available, releaseDate, GenderId, AuthorId } = req.body;
 
 	const book = await postControllerBook(
 		name,
@@ -21,7 +21,9 @@ const postHandlerBook = async (req, res) => {
 		description,
 		price,
 		available,
-		releaseDate
+		releaseDate,
+		GenderId,
+		AuthorId
 	);
 	res.status(201).json(book);
 };
