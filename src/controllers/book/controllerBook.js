@@ -1,4 +1,4 @@
-const { Book, Author, Gender } = require("../db");
+const { Book, Author, Gender } = require("../../db");
 
 const getAllBook = async () => {
 	const bookAll = await Book.findAll();
@@ -14,7 +14,7 @@ const postControllerBook = async (
 	description,
 	price,
 	available,
-	releaseDate,
+	releaseDate
 ) => {
 	if (!name || !image || !description || !price || !available || !releaseDate) {
 		throw new Error("All fields are required");
