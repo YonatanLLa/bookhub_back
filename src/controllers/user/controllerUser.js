@@ -1,8 +1,8 @@
 const { User } = require("../../db");
 const bcrypt = require("bcryptjs");
 
-const postControllerUser = async (name, email, passwordKey) => {
-	if (!name || !email || !passwordKey) {
+const postControllerUser = async (name, email, passwordKey, lastName) => {
+	if (!name ||!lastName || !email || !passwordKey) {
 		throw new Error("All fields are required");
 	}
 	if (!passwordKey || passwordKey.length < 8) {
@@ -17,6 +17,7 @@ const postControllerUser = async (name, email, passwordKey) => {
 		},
 		defaults: {
 			name: name,
+			lastName: lastName,
 			passwordKey: hashedPassword,
 		},
 	});
