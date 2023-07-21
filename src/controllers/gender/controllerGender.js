@@ -9,8 +9,13 @@ const allGender = async () => {
         where: {name: element}
        })
    }) 
-   const response = await Gender.findAll();
-   return response;
+   const response = await Gender.findAll({
+    attributes: ["name"]
+ })
+ const result = response.map(e =>{
+    return e.name
+ })
+ return result;
 }
 
 module.exports = allGender;

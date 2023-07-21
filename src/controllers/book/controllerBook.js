@@ -30,17 +30,14 @@ const postControllerBook = async (
 		price,
 		available,
 		releaseDate,
-	});
+	});	
 	await book.setGender(GenderId);
 	await book.setAuthor(AuthorId);
 	return book;
 };
-const deleteControllerBook = async (id) => {
-	
-};
+
 
 module.exports = {
 	getAllBook,
 	postControllerBook,
-	deleteControllerBook
 };
