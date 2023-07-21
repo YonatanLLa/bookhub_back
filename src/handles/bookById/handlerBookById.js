@@ -1,4 +1,4 @@
-const { getAllBook } = require("../book")
+const { getAllBook } = require("../../controllers/book/controllerBook")
 
 const getBookById = async (req, res) => {
     try {
