@@ -12,14 +12,18 @@ const filter = async (filters) => {
   }
 
   // Buscar libros por precio [1000, 5000]
-  whereClause.price = {
-    [Op.between]: JSON.parse(filters.price.replace(/'/g, '"')),
-  };
+  if(filters.price){
+    whereClause.price = {
+      [Op.between]: JSON.parse(filters.price.replace(/'/g, '"')),
+    };
+  }
 
   // Buscar libros con fecha de Lanzamiento
-  whereClause.releaseDate = {
-    [Op.between]: JSON.parse(filters.releaseDate.replace(/'/g, '"')),
-  };
+  if(filters.releaseDate){
+    whereClause.releaseDate = {
+      [Op.between]: JSON.parse(filters.releaseDate.replace(/'/g, '"')),
+    };
+  }
 
   // Si se proporciona el nombre del autor, buscamos el ID del autor para la consulta
   if (filters.author) {
