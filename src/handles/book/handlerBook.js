@@ -7,6 +7,8 @@ const { Book } = require("../../db")
 const getHandlerBook = async (req, res) => {
 	const { name } = req.query;
 	try {
+
+		const { name } = req.query;
 		const books = await getAllBook();
 		if(name){
 			const response = books.filter((e)=> e.name.toLowerCase().includes(name.toLowerCase()))
@@ -43,19 +45,19 @@ const postHandlerBook = async (req, res) => {
 const deleteHandlerBook = async (req, res) => {
 	try {
 		const bookId = req.params.id;
-	
+
 		const book = await Book.findByPk(bookId);
-	
+
 		if (!book) {
-		  return res.status(404).json({ error: 'El libro no existe.' });
+			return res.status(404).json({ error: 'El libro no existe.' });
 		}
-	
+
 		await book.destroy();
-	
-	  return res.status(200).json({ message: 'Libro eliminado correctamente.' });
+
+		return res.status(200).json({ message: 'Libro eliminado correctamente.' });
 	} catch (error) {
 		console.log(error.message)
-		res.status(400).json({error: error.message});
+		res.status(400).json({ error: error.message });
 	}
 };
 
@@ -103,5 +105,5 @@ module.exports = {
 	getHandlerBook,
 	postHandlerBook,
 	deleteHandlerBook,
-	putHandlerBook,
+	putHandlerBook
 };
