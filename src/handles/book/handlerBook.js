@@ -4,25 +4,47 @@ const {
 } = require("../../controllers/book/controllerBook");
 const { Book } = require("../../db")
 //trae todo los libro
+// const getHandlerBook = async (req, res) => {
+// 	const { name } = req.query;
+// 	try {
+
+// 		const { name } = req.query;
+// 		const books = await getAllBook();
+// 		if(name){
+// 			const response = books.filter((e)=> e.name.toLowerCase().includes(name.toLowerCase()))
+// 			if (response.length > 0) {
+// 				return res.status(200).json(response);
+// 			}
+// 			return res.status(200).json({msg: `No encontramos el lbro con el nombre ${name}`});
+// 		}
+// 	 	return res.status(200).json(books);
+// 	} catch (error) {
+// 		res.status(500).json(error);
+// 		console.log(error);
+// 	}
+// };
 const getHandlerBook = async (req, res) => {
 	const { name } = req.query;
 	try {
-
-		const { name } = req.query;
-		const books = await getAllBook();
-		if(name){
-			const response = books.filter((e)=> e.name.toLowerCase().includes(name.toLowerCase()))
-			if (response.length > 0) {
-				return res.status(200).json(response);
-			}
-			return res.status(200).json({msg: `No encontramos el lbro con el nombre ${name}`});
+	  const books = await getAllBook();
+	  if (name) {
+		const response = books.filter((e) =>
+		  e.name.toLowerCase().includes(name.toLowerCase())
+		);
+		if (response.length > 0) {
+		  return res.status(200).json(response);
+		} else {
+		  // Si no se encontraron libros con el nombre dado, devolvemos un array vacío
+		  return res.status(200).json([]);
 		}
-	 	return res.status(200).json(books);
+	  }
+	  return res.status(200).json(books);
 	} catch (error) {
-		res.status(500).json(error);
-		console.log(error);
+	  res.status(500).json(error);
+	  console.log(error);
 	}
-};
+  };
+  
 
 //cargar el libro en la base de dato
 const postHandlerBook = async (req, res) => {
