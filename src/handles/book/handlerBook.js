@@ -19,8 +19,8 @@ const getHandlerBook = async (req, res) => {
 		}
 	 	return res.status(200).json(books);
 	} catch (error) {
-		res.status(500).json(error);
-		console.log(error);
+		console.log(error.message);
+		return res.status(500).json({error: error.message});
 	}
 };
 
