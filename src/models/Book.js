@@ -1,6 +1,6 @@
 const { DataTypes, UUIDV4 } = require("sequelize")
 
-module.exports = (sequelize) => {
+module.exports = bookModel = (sequelize) => {
   sequelize.define("Book", {
     id: {
         type: DataTypes.UUID,
