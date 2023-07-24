@@ -6,9 +6,10 @@ const filter = async (filters) => {
   //console.log(filters)
 
   if (filters.search) {
+    const searchQuery = `%${filters.search}%`; // No es necesario convertir a minúsculas en este caso
     whereClause.name = {
-        [Op.like]: `%${filters.search}%`,
-      };
+      [Op.iLike]: searchQuery,
+    };
   }
 
   // Buscar libros por precio [1000, 5000]
@@ -16,8 +17,7 @@ const filter = async (filters) => {
   if (filters.price) {
     const priceArray = filters.price.split(',').map(Number);
     if (priceArray.length === 2) {
-      const sortedPrice = priceArray.sort((a, b) => a - b);
-      console.log(sortedPrice);
+     // console.log("<--<>", priceArray);
       whereClause.price = {
         [Op.between]: priceArray,
       };
@@ -53,6 +53,7 @@ const filter = async (filters) => {
   }
 
   const result = await Book.findAll({ where: whereClause, include: [Author, Gender] });
+  //console.log("<--->",result)
    return result;
 }
 
