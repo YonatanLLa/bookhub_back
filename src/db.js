@@ -14,6 +14,11 @@ PGPORT } = process.env;
 const sequelize = new Sequelize( `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`, {
 	logging: false,
 	native: false,
+		dialectOptions: {
+			ssl: {
+				require: true
+			}
+		}
 });
 
 const basename = path.basename(__filename);
