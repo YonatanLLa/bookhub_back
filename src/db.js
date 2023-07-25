@@ -1,7 +1,13 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
-const fs = require("fs");
-const path = require("path");
+//const fs = require("fs");
+//const path = require("path");
+const authorModel = require("./models/Author")
+const bookModel = require("./models/Book")
+const buyModel = require("./models/Buys")
+const genderModel = require("./models/Gender")
+const reviewModel = require("./models/Reviews")
+const userModel = require("./models/User")
 // const Reviews = require("./models/Reviews");
 
 const { 
@@ -21,7 +27,7 @@ const sequelize = new Sequelize( `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:$
 		}
 });
 
-const basename = path.basename(__filename);
+/*const basename = path.basename(__filename);
 
 const modelDefiners = [];
 //* esta funcion carga automaticamente los modelos al array modelDefiners
@@ -46,7 +52,13 @@ const capsEntries = entries.map((entry) => [
 	entry[0][0].toUpperCase() + entry[0].slice(1),
 	entry[1],
 ]);
-sequelize.models = Object.fromEntries(capsEntries);
+sequelize.models = Object.fromEntries(capsEntries);*/
+authorModel(sequelize)
+bookModel(sequelize)
+buyModel(sequelize)
+genderModel(sequelize)
+reviewModel(sequelize)
+userModel(sequelize)
 
 const { User, Book, Author, Gender, Buy, Reviews } = sequelize.models;
 

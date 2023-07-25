@@ -6,22 +6,31 @@ const filter = async (filters) => {
   //console.log(filters)
 
   if (filters.search) {
+    const searchQuery = `%${filters.search}%`; // No es necesario convertir a minúsculas en este caso
     whereClause.name = {
-        [Op.like]: `%${filters.search}%`,
-      };
-  }
-
-  // Buscar libros por precio [1000, 5000]
-  if(filters.price){
-    whereClause.price = {
-      [Op.between]: JSON.parse(filters.price.replace(/'/g, '"')),
+      [Op.iLike]: searchQuery,
     };
   }
 
+  // Buscar libros por precio [1000, 5000]
+  //console.log("filter",typeof filters.price)
+  if (filters.price) {
+    const priceArray = filters.price.split(',').map(Number);
+    if (priceArray.length === 2) {
+     // console.log("<--<>", priceArray);
+      whereClause.price = {
+        [Op.between]: priceArray,
+      };
+    }
+  }
+
   // Buscar libros con fecha de Lanzamiento
-  if(filters.releaseDate){
+  //console.log("fecha",filters.releaseDate)
+  if (filters.releaseDate) {
+    const [startDate, endDate] = filters.releaseDate.split(',');
+  
     whereClause.releaseDate = {
-      [Op.between]: JSON.parse(filters.releaseDate.replace(/'/g, '"')),
+      [Op.between]: [startDate.trim(), endDate.trim()],
     };
   }
 
@@ -30,7 +39,7 @@ const filter = async (filters) => {
     const author = await Author.findOne({ where: { name: filters.author } });
     if (author) {
         whereClause.AuthorId = author.dataValues.id;
-        console.log("--<",whereClause)
+        //console.log("--<",whereClause)
     }
   }
 
@@ -38,12 +47,13 @@ const filter = async (filters) => {
   if (filters.gender) {
     const gender = await Gender.findOne({ where: { name: filters.gender } });
     if (gender) {
-        console.log(gender.dataValues)
+        //console.log(gender.dataValues)
       whereClause.GenderId = gender.dataValues.id;
     }
   }
 
   const result = await Book.findAll({ where: whereClause, include: [Author, Gender] });
+  //console.log("<--->",result)
    return result;
 }
 

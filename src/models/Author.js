@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize")
 
-module.exports = (sequelize) => {
+module.exports = authorModel = (sequelize) => {
   sequelize.define("Author", {
     id: {
         type: DataTypes.INTEGER,
