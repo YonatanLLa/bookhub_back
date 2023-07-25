@@ -1,4 +1,7 @@
-const { postControllerUser } = require("../../controllers/user/controllerUser");
+const {
+	postControllerUser,
+	postControllerSign,
+} = require("../../controllers/user/controllerUser");
 
 const postHandlerUser = async (req, res) => {
 	try {
@@ -10,4 +13,17 @@ const postHandlerUser = async (req, res) => {
 	}
 };
 
-module.exports = postHandlerUser;
+const postHandlerSign = async (req, res) => {
+	try {
+		const {email} = req.body;
+		const user = await postControllerSign(email);
+		res.status(201).json("Mail disponible");
+	} catch (error) {
+		res.status(500).json({ error: "Hubo un error al verificar el mail" });
+	}
+}
+
+module.exports = {
+	postHandlerUser,
+	postHandlerSign,
+};
