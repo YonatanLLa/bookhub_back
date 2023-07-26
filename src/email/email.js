@@ -74,4 +74,7 @@ async function avisoDeCompra(email, detallesCompra) {
 }
 
 
-module.exports = avisoLogin;
+module.exports ={ 
+  avisoLogin,
+  avisoDeCompra
+};
