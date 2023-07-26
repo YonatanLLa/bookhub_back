@@ -39,7 +39,6 @@ async function avisoLogin(email) {
   }
 }
 
-
 async function avisoDeCompra(email, detallesCompra) {
   const transport = nodemilar.createTransport(config);
 
@@ -73,5 +72,7 @@ async function avisoDeCompra(email, detallesCompra) {
   }
 }
 
-
-module.exports = avisoLogin;
+module.exports = {
+  avisoLogin,
+  avisoDeCompra
+};
