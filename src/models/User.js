@@ -32,17 +32,7 @@ module.exports = userModel = (sequelize) => {
 			},
 			passwordKey: {
 				type: DataTypes.STRING,
-				allowNull: false,
-				validate: {
-					validations(value) {
-                        if (value.length <  8) {
-                            throw new Error("Password is required");
-                        }
-                        if (!/\d/.test(value)) {
-                            throw new Error("Password must contain at least one number");
-					    }
-                    }
-				},
+				allowNull: true,
 			},
 			ban: {
 				type: DataTypes.BOOLEAN,
