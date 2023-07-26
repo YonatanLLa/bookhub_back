@@ -1,6 +1,7 @@
 const {
 	getAllBook,
 	postControllerBook,
+	putControllerBook,
 } = require("../../controllers/book/controllerBook");
 const { Book } = require("../../db")
 //trae todo los libro
@@ -94,27 +95,11 @@ const putHandlerBook = async (req, res) => {
 			price,
 			available,
 			releaseDate,
-			GenderId,
-			AuthorId,
+			Gender,
+			Author,
 		} = req.body;
-
-		const book = await Book.findByPk(bookId);
-
-		if (!book) {
-			return res.status(404).json({ error: "El libro no existe." });
-		}
-
-		await book.update({
-			name,
-			image,
-			description,
-			price,
-			available,
-			releaseDate,
-			GenderId,
-			AuthorId,
-		});
-
+            await putControllerBook(bookId,name,image, description,price, available,releaseDate,Gender, Author)
+		
 		return res.status(200).json({ message: "Libro actualizado correctamente." });
 		
 	} catch (error) {
