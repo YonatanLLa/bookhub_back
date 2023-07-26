@@ -37,7 +37,47 @@ const postControllerBook = async (
 };
 
 
+const putControllerBook = async (
+	bookId,
+	name,
+	image,
+	description,
+	price,
+	available,
+	releaseDate,
+	genderId,
+	authorId
+) => {
+	
+	const book = await Book.findByPk(bookId);
+
+		if (!book) {
+			return res.status(404).json({ error: "El libro no existe." });
+		}
+		const gender = await Gender.findOne({
+			where: {name: genderId}
+		})
+		const author = await Author.findOne({
+			where: {name: authorId}
+		})
+		const GenderId = gender.id
+		const AuthorId = author.id
+		await book.update({
+			name,
+			image,
+			description,
+			price,
+			available,
+			releaseDate,
+			GenderId,
+			AuthorId
+		});
+   return "listo"
+};
+
+
 module.exports = {
 	getAllBook,
 	postControllerBook,
+	putControllerBook
 };
