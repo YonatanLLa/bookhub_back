@@ -22,7 +22,7 @@ routerGoogle.get('/auth/google',
 	passport.authenticate('google', { scope: [ 'email', 'profile' ] }
 ));
   
-routerGoogle.get( '/auth/google/callback',
+routerGoogle.get('/auth/google/callback',
 	passport.authenticate( 'google', {
 	  successRedirect: '/protected',
 	  failureRedirect: '/auth/google/failure'
@@ -30,7 +30,8 @@ routerGoogle.get( '/auth/google/callback',
 );
   
 routerGoogle.get('/protected', isLoggedIn, (req, res) => {
-	res.send(`Hello ${req.user.displayName}`);
+	console.log(req.user);
+	res.send(`Hello ${req.user.name}`);
 });
   
 routerGoogle.get('/logout', (req, res) => {
