@@ -4,8 +4,8 @@ const {
 	postHandlerBook,
 	deleteHandlerBook,
 	putHandlerBook,
-} = require("../../handles/book/handlerBook");
-const { getBookById } = require("../../handles/bookById/handlerBookById");
+} = require("../../handlers/book/handlerBook");
+const { getBookById } = require("../../handlers/bookById/handlerBookById");
 
 const routesBook = Router();
 

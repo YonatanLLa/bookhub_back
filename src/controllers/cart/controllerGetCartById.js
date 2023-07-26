@@ -1,10 +1,11 @@
-const { Buy, BuyBook } = require("../../db");
+const { Buy, Book } = require("../../db");
 
 const controllerGetCartById = async(id) => {
     try {
 
-        const cart = await Buy.findByPk(id, {
-            include: BuyBook
+        const cart = await Buy.findAll({
+            where: { UserId: id },
+            include: Book
         });
 
         return cart;
