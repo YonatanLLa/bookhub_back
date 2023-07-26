@@ -27,6 +27,14 @@ const postControllerUser = async (name, email, passwordKey, lastName) => {
 	return user;
 };
 
+const controllerByEmailUser = async (email) => {
+	const user = await User.findOne({
+		where: {email}
+	});
+	return user;
+};
+
 module.exports = {
 	postControllerUser,
+	controllerByEmailUser
 };
