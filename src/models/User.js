@@ -54,6 +54,10 @@ module.exports = userModel = (sequelize) => {
 				allowNull: false,
 				defaultValue: false,
 			},
+			googleId: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
 		},
 		{
 			paranoid: true,
