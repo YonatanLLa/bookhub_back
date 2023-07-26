@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const getHandleAllGender = require("../../handles/gender/handleGender");
+const getHandleAllGender = require("../../handlers/gender/handleGender");
 
 const routerGender = Router();
 
