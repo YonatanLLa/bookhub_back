@@ -11,11 +11,8 @@ module.exports = buyModel = (sequelize) => {
 			},
 			totalPrice: {
 				type: DataTypes.STRING,
-				allowNull: false,
+				allowNull: true,
 				validate: {
-					notNull: {
-						msg: "El precio total es requerido.",
-					},
 					isPositive(value){
             if (value <= 0) {
               throw new Error("El precio total debe ser positivo.");
@@ -25,11 +22,8 @@ module.exports = buyModel = (sequelize) => {
 			},
 			purchaseDate: {
 				type: DataTypes.DATE,
-				allowNull: false,
+				allowNull: true,
         validate: {
-          notNull: {
-            msg: "La fecha de compra es requerida.",
-          },
           isDate: {
             msg: "La fecha de compra debe ser una fecha válida.",
           }
