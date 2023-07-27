@@ -50,7 +50,7 @@ const getHandlerBook = async (req, res) => {
 //cargar el libro en la base de dato
 const postHandlerBook = async (req, res) => {
 	const { name, image, description, price, available, releaseDate, GenderId, AuthorId } = req.body;
-
+		
 	const book = await postControllerBook(
 		name,
 		image,

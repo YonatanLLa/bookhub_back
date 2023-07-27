@@ -1,6 +1,6 @@
 const { Buy, Book } = require("../../db");
 
-const controllerGetCartById = async(id) => {
+const getCartById = async(id) => {
     try {
 
         const cart = await Buy.findAll({
@@ -16,5 +16,5 @@ const controllerGetCartById = async(id) => {
 }
 
 module.exports = {
-    controllerGetCartById
+    getCartById
 };

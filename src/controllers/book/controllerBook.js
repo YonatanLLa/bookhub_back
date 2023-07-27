@@ -35,8 +35,6 @@ const postControllerBook = async (
 	await book.setAuthor(AuthorId);
 	return book;
 };
-
-
 const putControllerBook = async (
 	bookId,
 	name,
