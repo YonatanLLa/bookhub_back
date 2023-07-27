@@ -39,7 +39,18 @@ const postControllerSign = async (email) => {
 	}
 	return validationEmail;
 }
+
+	
+
+const controllerByEmailUser = async (email) => {
+	const user = await User.findOne({
+		where: {email}
+	});
+	return user;
+};
+
 module.exports = {
 	postControllerUser,
+	controllerByEmailUser,
 	postControllerSign
 };

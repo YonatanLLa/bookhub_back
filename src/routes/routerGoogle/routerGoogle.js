@@ -24,8 +24,8 @@ routerGoogle.get('/auth/google',
   
 routerGoogle.get('/auth/google/callback',
 	passport.authenticate( 'google', {
-	  successRedirect: '/protected',
-	  failureRedirect: '/auth/google/failure'
+	  successRedirect: 'http://127.0.0.1:5173',
+	  failureRedirect: 'http://127.0.0.1:5173'
 	})
 );
   
