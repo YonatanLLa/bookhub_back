@@ -5,7 +5,9 @@ const {
 
 const postHandlerPayment = async (req, res) => {
 	try {
-		const response = await createPayment();
+		const {unit_price} = req.body
+
+		const response = await createPayment(unit_price);
 		return res.status(200).json(response);
 	} catch (error) {
 		console.log(error.message);

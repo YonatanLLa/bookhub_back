@@ -5,7 +5,6 @@ const routerGender = require("./routerGender/routerGender");
 const routerUser = require("./routerUser/routerUser");
 const routerFilter = require("./routerFilter/routerFilter");
 const routerPayment = require("./routerPayment/routerPayment");
-const routerGoogle = require("./routerGoogle/routerGoogle")
 // const routerCarrito = require("./routerCarrito/routerCarrito");
 const routerGoogle = require("./routerGoogle/routerGoogle");
 const routerLoginNormal = require("./routerLoginNormal/routerLoginNormal");

@@ -3,7 +3,7 @@ const {Router} = require("express")
 const {
 	postHandlerPayment,
 	postHandlerWebhook,
-} = require("../../handles/payment/handlePayment");
+} = require("../../handlers/payment/handlePayment");
 
 const routerPayment = Router();
 
