@@ -2,6 +2,7 @@ require("dotenv").config()
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { User } = require('../../db');
+const { avisoLogin } = require("../../email/email");
 const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET}= process.env
 
 passport.use(new GoogleStrategy({
@@ -21,6 +22,7 @@ function(request, accessToken, refreshToken, profile, done) {
         lastName: profile.name.familyName,
         email: profile.email,
       });
+      await avisoLogin(profile.email)// le llega el email
       done(null, newUser);
     } else {
       done(null, user);
