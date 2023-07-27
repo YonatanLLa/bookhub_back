@@ -1,6 +1,6 @@
 const mercadopago = require("mercadopago");
 
-const createPayment = async (unit_price) => {
+const createPayment = async (totalAmount, title, quantity, item_id) => {
 	mercadopago.configure({
 		access_token:
 			"TEST-720103210760998-062018-26bb891f51d99b0b8cd420627bbe27f2-1404207396",
@@ -11,7 +11,7 @@ const createPayment = async (unit_price) => {
 				title: "Test",
 				quantity: 1,
 				currency_id: "ARS",
-				unit_price: unit_price,
+				unit_price: totalAmount,
 			},
 		],
 		back_urls: {
@@ -22,7 +22,7 @@ const createPayment = async (unit_price) => {
 		notification_url: "https://4b30-181-66-151-71.ngrok.io",
 	});
 
-	console.log(result);
+	// console.log(result.data.body.init_point);
 
 	return result;
 };
@@ -35,10 +35,9 @@ const receiveWebhook = async (req) => {
 
 			// Consultar el estado del pago en Mercado Pago
 			const payment = await mercadopago.payment.findById(paymentId);
-         
+
 			console.log(payment, "payment.... ");
 			// Actualizar el estado del pago en la base de datos según corresponda
-	
 		}
 	} catch (error) {
 		console.log(error.message);
