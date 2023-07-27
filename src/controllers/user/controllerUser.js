@@ -28,6 +28,21 @@ const postControllerUser = async (name, email, passwordKey, lastName) => {
 	await avisoLogin(email)
 	return user;
 };
+const postControllerSign = async (email) => {
+	const validationEmail = await User.findOne({
+		where: {
+			email: email,
+		}
+	})
+	if (validationEmail) {
+		return res.status(400).json({
+			error: "El correo electronico ya existe",
+		})
+	}
+	return validationEmail;
+}
+
+	
 
 const controllerByEmailUser = async (email) => {
 	const user = await User.findOne({
@@ -38,5 +53,6 @@ const controllerByEmailUser = async (email) => {
 
 module.exports = {
 	postControllerUser,
-	controllerByEmailUser
+	controllerByEmailUser,
+	postControllerSign
 };
