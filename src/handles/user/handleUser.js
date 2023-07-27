@@ -6,6 +6,9 @@ const {
 const postHandlerUser = async (req, res) => {
 	try {
 		const { name, email, passwordKey, lastName } = req.body;
+
+		console.log(name, email, passwordKey, lastName);
+
 		const user = await postControllerUser(name, email, passwordKey, lastName);
 		res.status(201).json(user);
 	} catch (error) {
@@ -16,12 +19,14 @@ const postHandlerUser = async (req, res) => {
 const postHandlerSign = async (req, res) => {
 	try {
 		const {email} = req.body;
+		console.log(email);
 		const user = await postControllerSign(email);
 		res.status(201).json("Mail disponible");
 	} catch (error) {
 		res.status(500).json({ error: "Hubo un error al verificar el mail" });
 	}
 }
+
 
 module.exports = {
 	postHandlerUser,
