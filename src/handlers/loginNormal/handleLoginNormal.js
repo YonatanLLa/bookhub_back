@@ -5,6 +5,7 @@ const generaJsonWebToken = require("../../jwt/generajwt");
 
 const loginNormal = async (req, res) => {
     const { email, password } = req.body;
+    console.log(email, password);
    try {
     const user = await controllerByEmailUser(email);
 
