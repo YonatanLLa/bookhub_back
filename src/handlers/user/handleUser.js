@@ -2,6 +2,16 @@ const {
 	postControllerUser,
 	postControllerSign,
 } = require("../../controllers/user/controllerUser");
+const{ User } = require("../../db")
+
+const getHandlerUser = async (req, res) => {
+	try {
+	     const user =await User.findAll()
+		return res.status(201).json(user);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
 
 const postHandlerUser = async (req, res) => {
 	try {
@@ -31,4 +41,5 @@ const postHandlerSign = async (req, res) => {
 module.exports = {
 	postHandlerUser,
 	postHandlerSign,
+	getHandlerUser
 };
