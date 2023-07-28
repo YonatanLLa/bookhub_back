@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET } = process.env;
 
-const generaJsonWebToken = async (id, email,) => {
+const generaJsonWebToken = async (id, email) => {
         // Crear el token JWT
         const token = jwt.sign(
           { userId: id, email },
