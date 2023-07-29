@@ -49,6 +49,9 @@ Reviews.belongsTo(User);
 User.hasMany(Book, {foreignKey: 'venta_user_id',});
 Book.belongsTo(User, {foreignKey: 'venta_user_id',});
 
+User.hasMany(Buy, {through: "compras_usuario"});
+Buy.belongsTo(User, {through: "compras_usuario"});
+
 Author.hasMany(Book);
 Book.belongsTo(Author);
 
