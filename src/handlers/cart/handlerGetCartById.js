@@ -1,10 +1,10 @@
-const { controllerGetCartById } = require("../../controllers/cart/controllerGetCartById");
+const { getCartById } = require("../../controllers/cart/controllerGetCartById");
 
 const handlerGetCartById = async(req, res) => {
     try {
 
         const { id } = req.params;
-        const cart = await controllerGetCartById(id);
+        const cart = await getCartById(id);
 
         res.status(200).json(cart);
 

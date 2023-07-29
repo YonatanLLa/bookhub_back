@@ -1,5 +1,6 @@
 const { User } = require("../../db");
 const bcrypt = require("bcryptjs");
+const { avisoLogin } = require("../../email/email");
 
 const postControllerUser = async (name, email, passwordKey, lastName) => {
 	if (!name ||!lastName || !email || !passwordKey) {
@@ -24,6 +25,7 @@ const postControllerUser = async (name, email, passwordKey, lastName) => {
 	if (!created) {
 		throw new Error("Email already exists");
 	}
+	await avisoLogin(email)
 	return user;
 };
 const postControllerSign = async (email) => {

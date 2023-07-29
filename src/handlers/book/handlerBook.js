@@ -4,6 +4,9 @@ const {
 	putControllerBook,
 } = require("../../controllers/book/controllerBook");
 const { Book } = require("../../db")
+require("dotenv").config()
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = process.env;
 //trae todo los libro
 // const getHandlerBook = async (req, res) => {
 // 	const { name } = req.query;
@@ -49,8 +52,23 @@ const getHandlerBook = async (req, res) => {
 
 //cargar el libro en la base de dato
 const postHandlerBook = async (req, res) => {
-	const { name, image, description, price, available, releaseDate, GenderId, AuthorId } = req.body;
-		
+		const { name, image, description, price, available, releaseDate, GenderId, AuthorId } = req.body;
+		const token = req.headers.authorization;
+	
+		if (!token) {
+		  return res.status(401).json({ message: 'Token no proporcionado' });
+		}
+	
+		// Verifica y decodifica el token para obtener el userId
+		let id;
+		try {
+		  const tokenParts = token.split('Bearer').pop().trim();
+		  const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+		  id = tokenized.userId;
+		} catch (error) {
+		  return res.status(401).json({ message: 'Token inválido' });
+		}
+
 	const book = await postControllerBook(
 		name,
 		image,
@@ -59,7 +77,8 @@ const postHandlerBook = async (req, res) => {
 		available,
 		releaseDate,
 		GenderId,
-		AuthorId
+		AuthorId,
+		id
 	);
 	res.status(201).json(book);
 };

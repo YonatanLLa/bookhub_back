@@ -8,6 +8,7 @@ const routerPayment = require("./routerPayment/routerPayment");
 // const routerCarrito = require("./routerCarrito/routerCarrito");
 const routerGoogle = require("./routerGoogle/routerGoogle");
 const routerLoginNormal = require("./routerLoginNormal/routerLoginNormal");
+const routerPerfil = require("./routerPrefil/routerPerfil");
 
 const routes = Router();
 
@@ -19,6 +20,7 @@ routes.use("/filter", routerFilter)
 routes.use("/", routerPayment);
 routes.use("/login", routerLoginNormal)
 routes.use("/", routerGoogle)
+routes.use("/perfil", routerPerfil)
 // routes.use("/carts", routerCarrito)
 
 module.exports = routes;
