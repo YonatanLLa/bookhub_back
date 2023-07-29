@@ -1,4 +1,4 @@
-const { User, Book, Buy } = require("../../db")
+const { User, Book, Buy, Author, Gender } = require("../../db")
 
 const myPerfil = async (id) => {
    const user = await User.findByPk(id,{
@@ -9,7 +9,8 @@ const myPerfil = async (id) => {
 
 const myProduct = async (id) => {
     const user = await Book.findAll({
-        where: {venta_user_id: id}
+        where: {venta_user_id: id},    
+        include:[ { model: Author, attributes: ["id","name"]}, {model: Gender, attributes: ["id","name"]}] 
     })
     return user;
 }
