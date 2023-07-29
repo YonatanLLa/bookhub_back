@@ -4,7 +4,7 @@ const { getHandlePerfil, getHandleProduct, getHandleMyBuys } = require("../../ha
 const routerPerfil = Router()
 
 routerPerfil.get("/", getHandlePerfil)
-routerPerfil.get("/product", getHandleProduct)
+routerPerfil.get("/myBooks", getHandleProduct)
 routerPerfil.get("/buys", getHandleMyBuys)
 
 module.exports = routerPerfil;
