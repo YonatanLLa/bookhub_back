@@ -11,7 +11,7 @@ const routerUser = Router();
 
 routerUser.get("/", getHandlerUser);
 routerUser.get("/buys", handlerPurchasesMadeByTheUser);
-routerUser.get("/myBooks", handlerUserPublishedBooks);
+routerUser.get("/myBooks/:id", handlerUserPublishedBooks);
 routerUser.post("/",postHandlerUser );
 routerUser.post("/sign", postHandlerSign);
 
