@@ -1,50 +1,85 @@
 const mercadopago = require("mercadopago");
+const { Buy } = require("../../db.js");
 
-const createPayment = async (totalAmount, title, quantity, item_id) => {
+const createPayment = async (products, totalPrice, title) => {
+	console.log(products, "items");
 	mercadopago.configure({
 		access_token:
 			"TEST-720103210760998-062018-26bb891f51d99b0b8cd420627bbe27f2-1404207396",
 	});
-	const result = await mercadopago.preferences.create({
+
+	const preference = {
 		items: [
 			{
-				title: "Test",
+				title: title,
 				quantity: 1,
 				currency_id: "ARS",
-				unit_price: totalAmount,
+				unit_price: totalPrice,
 			},
 		],
 		back_urls: {
-			success: "http://localhost:5173/payment/failure",
-			failure: "http://localhost:3000/payment/failure",
+			success: "http://localhost:5173/home",
+			failure: "http://localhost:5173/carrito",
 			pending: "http://localhost:3000/payment/pending",
 		},
-		notification_url: "https://4b30-181-66-151-71.ngrok.io",
-	});
+		binary_mode: true,
+		notification_url: "https://6d96-181-66-151-108.ngrok.io/webhook",
+	};
 
-	// console.log(result.data.body.init_point);
-
-	return result;
-};
-
-const receiveWebhook = async (req) => {
 	try {
-		const { action, data } = req.body;
-		if (action === "payment.created") {
-			const paymentId = data.id;
+		const paymentPreference = await mercadopago.preferences.create(preference);
 
-			// Consultar el estado del pago en Mercado Pago
-			const payment = await mercadopago.payment.findById(paymentId);
+		const [newEntry, created] = await Buy.findOrCreate({
+			where: {
+				id: paymentPreference.body.id,
+			},
+			defaults: {
+				id: paymentPreference.body.id,
+				products: products,
+				purchaseDate: new Date(),
+			},
+		});
 
-			console.log(payment, "payment.... ");
-			// Actualizar el estado del pago en la base de datos según corresponda
+		console.log(created, "created");
+
+		if (created) {
+			return {
+				preference_id: paymentPreference.body.id,
+				new: newEntry,
+				url: paymentPreference.body.init_point,
+			};
 		}
+
+		res.status(400).json("Error al subir la compra");
+		return paymentPreference;
 	} catch (error) {
-		console.log(error.message);
-		res.status(400).json({ error: error.message });
+		res.status(500).json("Error creating payment preference.");
 	}
 };
 
+const receiveWebhook = async (req) => {
+	 try {
+		// console.log(req.query, "query");
+			if (req.query.topic === "merchant_order") {
+				const mpResponse = await mercadopago.merchant_orders.findById(
+					req.query.id
+				);
+				const { preference_id, order_status } = mpResponse.response;
+				if (order_status === "payment_required") {
+					const response = await Buy.findByPk(preference_id);
+					const { send } = response.dataValues;
+					if (!send) {
+						await response.update({ send: true });
+					}
+				}
+			}
+			return {
+				status: "success",
+			}
+		} catch (error) {
+			res.status(500).json({ error: error.message });
+		}
+};
 module.exports = {
 	createPayment,
 	receiveWebhook,

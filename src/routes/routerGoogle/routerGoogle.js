@@ -1,10 +1,19 @@
 const { Router } = require("express");
-
+const cors = require("cors");
 const routerGoogle = Router();
 
 const session = require('express-session');
 const passport = require('passport');
 require('./auth');
+
+const corsOptions = {
+	origin: "*",
+	credentials: true, // Permitir el envío de cookies y credenciales
+	methods: "GET, POST, OPTIONS, PUT, DELETE", // Métodos HTTP permitidos
+	allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept", // Encabezados permitidos
+};
+
+routerGoogle.use(cors(corsOptions));
 
 function isLoggedIn(req, res, next) {
 	req.user ? next() : res.sendStatus(401);
@@ -15,6 +24,8 @@ routerGoogle.use(passport.initialize());
 routerGoogle.use(passport.session());
   
 routerGoogle.get('/google', (req, res) => {
+
+	console.log(req.user);
 	res.send('<a href="/auth/google">Authenticate with Google</a>');
 });
   

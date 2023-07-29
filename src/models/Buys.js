@@ -1,37 +1,33 @@
-const { DataTypes } = require("sequelize")
+const { DataTypes } = require("sequelize");
 
 module.exports = buyModel = (sequelize) => {
-  sequelize.define(
+	sequelize.define(
 		"Buy",
 		{
 			id: {
-				type: DataTypes.INTEGER,
-				primaryKey: true,
-				autoIncrement: true,
-			},
-			totalPrice: {
 				type: DataTypes.STRING,
-				allowNull: true,
-				validate: {
-					isPositive(value){
-            if (value <= 0) {
-              throw new Error("El precio total debe ser positivo.");
-            }
-          }
-				},
-			},
+				primaryKey: true,
+			},		
 			purchaseDate: {
 				type: DataTypes.DATE,
 				allowNull: true,
-        validate: {
-          isDate: {
-            msg: "La fecha de compra debe ser una fecha válida.",
-          }
-        }
+				validate: {
+					isDate: {
+						msg: "La fecha de compra debe ser una fecha válida.",
+					},
+				},
+			},
+			products: {
+				type: DataTypes.JSONB, // Adjust the data type accordingly
+				allowNull: true,
+			},
+			send: {
+				type: DataTypes.BOOLEAN,
+				defaultValue: false,
 			},
 		},
 		{
 			paranoid: true,
 		}
 	);
-}
+};
