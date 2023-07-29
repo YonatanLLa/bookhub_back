@@ -8,7 +8,7 @@ const generaJsonWebToken = (id, email) => {
         const token = jwt.sign(
           { userId: id, email },
           JWT_SECRET, 
-          { expiresIn: "1h" } // Opcional: tiempo de expiración del token (1 hora en este caso)
+          { expiresIn: "1d" } // Opcional: tiempo de expiración del token (1 hora en este caso)
         );
         console.log("generate-token",token)
         // Enviar el token JWT al cliente, por ejemplo, en la respuesta JSON

@@ -4,12 +4,19 @@ const { myPerfil, myProduct, myBuys } = require("../../controllers/perfil/contro
 const { JWT_SECRET } = process.env;
 
 const getHandlePerfil = async (req, res) => {
-    let token = req.headers.authorization;
+    const token = req.headers.authorization;
+	
+    if (!token) {
+      return res.status(401).json({ message: 'Token no proporcionado' });
+    }
+
+    // Verifica y decodifica el token para obtener el userId
+    let id;
     try {
-       token = token.split("Bearer").pop().trim();
-       const tokenized = jwt.verify(token, JWT_SECRET)
-       const id = tokenized.userId;
-       
+      const tokenParts = token.split('Bearer').pop().trim();
+      const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+       id = tokenized.userId;
+
        const response = await myPerfil(id)
        return res.status(200).json(response) 
     } catch (error) {
@@ -19,12 +26,19 @@ const getHandlePerfil = async (req, res) => {
 }
 
 const getHandleProduct = async (req, res) => {
-    let token = req.headers.authorization;
+    const token = req.headers.authorization;
+	
+    if (!token) {
+      return res.status(401).json({ message: 'Token no proporcionado' });
+    }
+
+    // Verifica y decodifica el token para obtener el userId
+    let id;
     try {
-       token = token.split("Bearer").pop().trim();
-       const tokenized = jwt.verify(token, JWT_SECRET)
-       const id = tokenized.userId;
-       
+      const tokenParts = token.split('Bearer').pop().trim();
+      const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+      id = tokenized.userId;
+
        const response = await myProduct(id)
        return res.status(200).json(response) 
     } catch (error) {
@@ -34,12 +48,19 @@ const getHandleProduct = async (req, res) => {
 }
 
 const getHandleMyBuys = async (req, res) => {
-    let token = req.headers.authorization;
-    try {
-       token = token.split("Bearer").pop().trim();
-       const tokenized = jwt.verify(token, JWT_SECRET)
-       const id = tokenized.userId;
-       
+   	const token = req.headers.authorization;
+	
+		if (!token) {
+		  return res.status(401).json({ message: 'Token no proporcionado' });
+		}
+	
+		// Verifica y decodifica el token para obtener el userId
+		let id;
+		try {
+		  const tokenParts = token.split('Bearer').pop().trim();
+		  const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+		  id = tokenized.userId;
+          
        const response = await myBuys(id)
        return res.status(200).json(response) 
     } catch (error) {
