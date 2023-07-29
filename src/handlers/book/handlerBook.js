@@ -52,11 +52,22 @@ const getHandlerBook = async (req, res) => {
 
 //cargar el libro en la base de dato
 const postHandlerBook = async (req, res) => {
-	const { name, image, description, price, available, releaseDate, GenderId, AuthorId } = req.body;
-	let token = req.headers.authorization;
-       token = token.split("Bearer").pop().trim();
-       const tokenized = jwt.verify(token, JWT_SECRET)
-       const id = tokenized.userId;	
+		const { name, image, description, price, available, releaseDate, GenderId, AuthorId } = req.body;
+		const token = req.headers.authorization;
+	
+		if (!token) {
+		  return res.status(401).json({ message: 'Token no proporcionado' });
+		}
+	
+		// Verifica y decodifica el token para obtener el userId
+		let id;
+		try {
+		  const tokenParts = token.split('Bearer').pop().trim();
+		  const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+		  id = tokenized.userId;
+		} catch (error) {
+		  return res.status(401).json({ message: 'Token inválido' });
+		}
 
 	const book = await postControllerBook(
 		name,
