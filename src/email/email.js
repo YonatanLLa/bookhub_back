@@ -72,8 +72,47 @@ async function avisoDeCompra(email, detallesCompra) {
   }
 }
 
+async function avisoAlVendedor(email, libro) {
+  const transport = nodemilar.createTransport(config);
+  const mensajeVendedor = {
+    from: `Tu E-commerce de Libros <${NODEMAILER_MAIL}>`,
+    to: email,
+    subject: 'Confirmación de venta',
+    html: `
+      <div style="font-family: Arial, sans-serif; text-align: center;">
+        <h1 style="color: #1e3799;">¡Has realizado una venta!</h1>
+        <p style="font-size: 16px;">Se ha realizado una compra de tu libro en nuestro sitio.</p>
+        <p style="font-size: 16px;">Detalles del libro vendido:</p>
+        <ul style="list-style: none; padding: 0;">
+          <li><strong>Título:</strong> ${libro.titulo}</li>
+          <li><strong>Autor:</strong> ${libro.autor}</li>
+          <li><strong>Precio:</strong> ${libro.precio}</li>
+        </ul>
+        <p style="font-size: 16px;">¡Esperamos que el comprador disfrute de tu libro!</p>
+        <p style="font-size: 16px;">Atentamente,</p>
+        <p style="font-size: 16px;">El equipo de Tu E-commerce de Libros</p>
+      </div>
+    `,
+  };
+
+  try {
+    // Enviar correos al comprador y al vendedor
+    const infoComprador = await transport.sendMail(mensajeComprador);
+    console.log('Correo enviado al comprador:', infoComprador.messageId);
+
+    const infoVendedor = await transport.sendMail(mensajeVendedor);
+    console.log('Correo enviado al vendedor:', infoVendedor.messageId);
+
+    return { comprador: infoComprador, vendedor: infoVendedor };
+  } catch (error) {
+    console.error('Error al enviar el correo:', error);
+    throw error; // Propagar el error para que pueda ser manejado en el código que llama a esta función
+  }
+}
+
 
 module.exports ={ 
   avisoLogin,
-  avisoDeCompra
+  avisoDeCompra,
+  avisoAlVendedor
 };
