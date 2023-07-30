@@ -7,6 +7,8 @@ const genderModel = require("./models/Gender")
 const reviewModel = require("./models/Reviews")
 const userModel = require("./models/User")
 const buyBookModel = require("./models/BuyBook")
+const commentModel = require("./models/Comment")
+const punctuationModel = require("./models/Punctuation")
 // const Reviews = require("./models/Reviews");
 
 const { 
@@ -33,12 +35,26 @@ genderModel(sequelize)
 reviewModel(sequelize)
 userModel(sequelize)
 buyBookModel(sequelize)
+commentModel(sequelize)
+punctuationModel(sequelize)
 
-const { User, Book, Author, Gender, Buy, Reviews, BuyBook } = sequelize.models;
+const { User, Book, Author, Gender, Buy, Reviews, BuyBook, Comment, Punctuation } = sequelize.models;
 
 //relaciones con los modelos
 
 // relacion uno a mucho
+Book.hasMany(Punctuation)
+Punctuation.belongsTo(Book);
+
+User.hasMany(Punctuation)
+Punctuation.belongsTo(User);
+
+Book.hasMany(Comment)
+Comment.belongsTo(Book);
+
+User.hasMany(Comment)
+Comment.belongsTo(User);
+
 User.hasMany(Buy);
 Buy.belongsTo(User);
 
