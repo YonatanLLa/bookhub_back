@@ -1,5 +1,13 @@
 const { Comment, Book, User } = require("../../db")
 
+const getAllMyComment = async (id) => {
+    const response = await Comment.findAll({
+        where: { UserId: id },
+        attributes: ["id", "name", "comment"]
+    });
+    return response;
+};
+
 const getAllReviews = async (id) => {
     const response = await Comment.findAll({
         where: { BookId: id },
@@ -22,5 +30,6 @@ const createReviews = async (id, comment, userId) => {
 
 module.exports = {
     getAllReviews,
-    createReviews
+    createReviews,
+    getAllMyComment
 }

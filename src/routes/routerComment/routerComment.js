@@ -1,9 +1,10 @@
 const { Router } = require("express");
-const { getHandleAllReview, postHandleReview } = require("../../handlers/comment/handleComment");
+const { getHandleAllComment, postHandleComment, handleMyComment } = require("../../handlers/comment/handleComment");
 
 const routerComment = Router()
 
-routerComment.get("/:id", getHandleAllReview)
-routerComment.post("/", postHandleReview)
+routerComment.get("/", handleMyComment)
+routerComment.get("/:id", getHandleAllComment)
+routerComment.post("/", postHandleComment)
 
 module.exports = routerComment;
