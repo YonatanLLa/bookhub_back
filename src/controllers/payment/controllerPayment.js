@@ -53,19 +53,19 @@ const createPayment = async (products, totalPrice, title, userid) => {
 };
 
 const receiveWebhook = async (req) => {
-	console.log(req.query);
+
+
 	if (req.query.topic === "merchant_order") {
 		const mpResponse = await mercadopago.merchant_orders.findById(req.query.id);
 		const { preference_id, order_status } = mpResponse.response;
 		if (order_status === "payment_required") {
 			const response = await Venta.findByPk(preference_id);
 
-			console.log(response, "response");
-
 			const { send } = response.dataValues;
 			if (!send) {
 				await response.update({ send: true });
 			}
+			
 		}
 	}
 	return {

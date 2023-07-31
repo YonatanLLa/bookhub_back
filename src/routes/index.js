@@ -11,6 +11,7 @@ const routerLoginNormal = require("./routerLoginNormal/routerLoginNormal");
 const routerPerfil = require("./routerPrefil/routerPerfil");
 const routerComment = require("./routerComment/routerComment");
 const routerPuntuation = require("./routerPuntuation/routerPuntuation");
+const routerCompras = require("./routerCompras/routerCompras");
 
 const routes = Router();
 
@@ -25,6 +26,7 @@ routes.use("/", routerGoogle)
 routes.use("/perfil", routerPerfil)
 routes.use("/comments", routerComment)
 routes.use("/punctuation", routerPuntuation)
+routes.use("/compras", routerCompras)
 // routes.use("/carts", routerCarrito)
 
 module.exports = routes;
