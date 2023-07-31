@@ -40,7 +40,7 @@ buyBookModel(sequelize)
 commentModel(sequelize)
 punctuationModel(sequelize)
 
-const { User, Book, Author, Gender, Buy, Reviews, BuyBook, Comment, Punctuation } = sequelize.models;
+const { User, Book, Author, Gender, Buy, Reviews, BuyBook, Comment, Punctuation,Venta } = sequelize.models;
 
 //relaciones con los modelos
 

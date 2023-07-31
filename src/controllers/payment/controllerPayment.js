@@ -5,7 +5,6 @@ require("dotenv").config();
 const { URL_BACK, URL_fRONT, URL_TOKEN } = process.env;
 
 const createPayment = async (products, totalPrice, title, userid) => {
-	console.log(userid, "items");
 	mercadopago.configure({
 		access_token: `${URL_TOKEN}`,
 	});
@@ -54,6 +53,7 @@ const createPayment = async (products, totalPrice, title, userid) => {
 };
 
 const receiveWebhook = async (req) => {
+	console.log(req.query);
 	if (req.query.topic === "merchant_order") {
 		const mpResponse = await mercadopago.merchant_orders.findById(req.query.id);
 		const { preference_id, order_status } = mpResponse.response;

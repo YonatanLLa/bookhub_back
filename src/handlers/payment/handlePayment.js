@@ -11,9 +11,9 @@ const { JWT_SECRET } = process.env;
 const postHandlerPayment = async (req, res) => {
 	try {
 		const { products, totalPrice, title } = req.body;
+		console.log(products, totalPrice, title);
 
 		const token = req.headers.authorization;
-		console.log(token);
 		if (!token) {
 			return res.status(401).json({ message: "Token no proporcionado" });
 		}
