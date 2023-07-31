@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const cors = require("cors");
 const routerGoogle = Router();
-const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
 const generaJsonWebToken = require("../../jwt/generajwt");
@@ -31,7 +30,7 @@ routerGoogle.get("/auth/google", (req, res) => {
 	try {
 		const googleAuthUrl = "https://accounts.google.com/o/oauth2/v2/auth" +
 		  "?response_type=code" +
-		  "&redirect_uri=https://servidor-libreria.onrender.com/auth/google/callback" +
+		  "&redirect_uri=http://localhost:3001/auth/google/callback" +
 		  "&scope= email profile" +
 		  "&client_id=582695265371-5c11lptg39sbffmv67tocl8lde8f47st.apps.googleusercontent.com";
 	  console.log("dd")
@@ -57,12 +56,12 @@ passport.authenticate('google', { failureRedirect: '/' }),
 	console.log("token-route", token)
 	console.log("token-route-req", req.user.token)
   // Aquí redireccionas al frontend con el token de acceso u otra información relevante
-  res.redirect('http://127.0.0.1:5173/home?token=' + token); // Suponiendo que req.user.token contiene el token de acceso
+  res.redirect('http://localhost:5173/home?token=' + token); // Suponiendo que req.user.token contiene el token de acceso
 }
 );
   
-routerGoogle.get('http://127.0.0.1:5173/home', isLoggedIn, (req, res) => {
-	console.log("req.user",req.user);
+routerGoogle.get("http://localhost:5173/home", isLoggedIn, (req, res) => {
+	console.log("req.user", req.user);
 	res.send(`Hello ${req.user.name}`);
 });
   

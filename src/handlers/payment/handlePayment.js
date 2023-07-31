@@ -2,19 +2,29 @@ const {
 	createPayment,
 	receiveWebhook,
 } = require("../../controllers/payment/controllerPayment");
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = process.env;
+
+// Verifica y decodifica el token para obtener el userId
+
 
 const postHandlerPayment = async (req, res) => {
 	try {
 		const { products, totalPrice, title } = req.body;
-		console.log(totalPrice, title, "datoooooooo");
 
+		const token = req.headers.authorization;
+		console.log(token);
+		if (!token) {
+			return res.status(401).json({ message: "Token no proporcionado" });
+		}
+		let id;
+		const tokenParts = token.split("Bearer").pop().trim();
+		const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+		id = tokenized.userId;
+		
+		const response = await createPayment(products, totalPrice, title, id);
 
-		const response = await createPayment(products, totalPrice, title);
-
-		console.log(response);
-		return res.status(200).json(response);
-
-
+		res.status(200).json(response);
 	} catch (error) {
 		console.log(error.message);
 		res.status(400).json({ error: error.message });
@@ -24,7 +34,7 @@ const postHandlerPayment = async (req, res) => {
 const postHandlerWebhook = async (req, res) => {
 	try {
 		const response = await receiveWebhook(req);
-		return res.status(200).json("success");
+	 	res.status(200).json(response);
 	} catch (error) {
 		console.log(error.message);
 		res.status(400).json({ error: error.message });

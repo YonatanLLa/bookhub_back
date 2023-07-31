@@ -1,11 +1,13 @@
 const mercadopago = require("mercadopago");
-const { Buy } = require("../../db.js");
+const { Venta, User } = require("../../db.js");
+require("dotenv").config();
 
-const createPayment = async (products, totalPrice, title) => {
-	console.log(products, "items");
+const { URL_BACK, URL_fRONT, URL_TOKEN } = process.env;
+
+const createPayment = async (products, totalPrice, title, userid) => {
+	console.log(userid, "items");
 	mercadopago.configure({
-		access_token:
-			"TEST-720103210760998-062018-26bb891f51d99b0b8cd420627bbe27f2-1404207396",
+		access_token: `${URL_TOKEN}`,
 	});
 
 	const preference = {
@@ -18,67 +20,57 @@ const createPayment = async (products, totalPrice, title) => {
 			},
 		],
 		back_urls: {
-			success: "http://localhost:5173/home",
-			failure: "http://localhost:5173/carrito",
-			pending: "http://localhost:3000/payment/pending",
+			success: `${URL_fRONT}/home`,
+			failure: `${URL_fRONT}/carrito`,
+			pending: `${URL_fRONT}/carrito`,
 		},
 		binary_mode: true,
-		notification_url: "https://6d96-181-66-151-108.ngrok.io/webhook",
+		notification_url: `${URL_BACK}/webhook`,
 	};
+	const paymentPreference = await mercadopago.preferences.create(preference);
 
-	try {
-		const paymentPreference = await mercadopago.preferences.create(preference);
+	const [newEntry, created] = await Venta.findOrCreate({
+		where: {
+			id: paymentPreference.body.id,
+		},
+		defaults: {
+			id: paymentPreference.body.id,
+			products: products,
+			purchaseDate: new Date(),
+		},
+	});
 
-		const [newEntry, created] = await Buy.findOrCreate({
-			where: {
-				id: paymentPreference.body.id,
-			},
-			defaults: {
-				id: paymentPreference.body.id,
-				products: products,
-				purchaseDate: new Date(),
-			},
-		});
+	const user = await User.findByPk(userid);
+	await newEntry.setUser(user);
 
-		console.log(created, "created");
-
-		if (created) {
-			return {
-				preference_id: paymentPreference.body.id,
-				new: newEntry,
-				url: paymentPreference.body.init_point,
-			};
-		}
-
-		res.status(400).json("Error al subir la compra");
-		return paymentPreference;
-	} catch (error) {
-		res.status(500).json("Error creating payment preference.");
+	if (created) {
+		return {
+			preference_id: paymentPreference.body.id,
+			new: newEntry,
+			url: paymentPreference.body.init_point,
+		};
 	}
+	return paymentPreference;
 };
 
 const receiveWebhook = async (req) => {
-	 try {
-		// console.log(req.query, "query");
-			if (req.query.topic === "merchant_order") {
-				const mpResponse = await mercadopago.merchant_orders.findById(
-					req.query.id
-				);
-				const { preference_id, order_status } = mpResponse.response;
-				if (order_status === "payment_required") {
-					const response = await Buy.findByPk(preference_id);
-					const { send } = response.dataValues;
-					if (!send) {
-						await response.update({ send: true });
-					}
-				}
+	if (req.query.topic === "merchant_order") {
+		const mpResponse = await mercadopago.merchant_orders.findById(req.query.id);
+		const { preference_id, order_status } = mpResponse.response;
+		if (order_status === "payment_required") {
+			const response = await Venta.findByPk(preference_id);
+
+			console.log(response, "response");
+
+			const { send } = response.dataValues;
+			if (!send) {
+				await response.update({ send: true });
 			}
-			return {
-				status: "success",
-			}
-		} catch (error) {
-			res.status(500).json({ error: error.message });
 		}
+	}
+	return {
+		status: "success",
+	};
 };
 module.exports = {
 	createPayment,
