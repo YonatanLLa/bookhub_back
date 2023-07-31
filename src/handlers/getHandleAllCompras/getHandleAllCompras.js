@@ -1,20 +1,11 @@
 require("dotenv").config();
-const {
-	createPayment,
-	receiveWebhook,
-} = require("../../controllers/payment/controllerPayment");
+const { Venta } = require("../../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 
-// Verifica y decodifica el token para obtener el userId
-
-const postHandlerPayment = async (req, res) => {
+const getHandleAllCompras = async (req, res) => {
 	try {
-		const { products, totalPrice, title } = req.body;
-		console.log(products, totalPrice, title);
-
 		const token = req.headers.authorization;
-		console.log(token, "token");
 		if (!token) {
 			return res.status(401).json({ message: "Token no proporcionado" });
 		}
@@ -22,18 +13,37 @@ const postHandlerPayment = async (req, res) => {
 		const tokenParts = token.split("Bearer").pop().trim();
 		const tokenized = jwt.verify(tokenParts, JWT_SECRET);
 		id = tokenized.userId;
-		const response = await createPayment(products, totalPrice, title, id);
-		res.status(200).json(response);
+		const getAllcompra = await Venta.findAll({
+			where: {
+				UserId: id,
+				send: true,
+			},
+		});
+		res.status(200).json(getAllcompra);
 	} catch (error) {
 		console.log(error.message);
 		res.status(400).json({ error: error.message });
 	}
 };
 
-const postHandlerWebhook = async (req, res) => {
+const getAllComprasById = async (req, res) => {
 	try {
-		const response = await receiveWebhook(req);
-		res.status(200).json(response);
+		const { id } = req.params;
+		const getAllcompra = await Venta.findAll({
+			where: {
+				id: id,
+				send: true,
+			},
+		});
+		if (getAllcompra.length > 0) {
+			// console.log("send", getAllcompra);
+			return res.status(200).json({
+				send: true,
+			});
+		}
+		return res.status(200).json({
+			send: false,
+		});
 	} catch (error) {
 		console.log(error.message);
 		res.status(400).json({ error: error.message });
@@ -41,6 +51,6 @@ const postHandlerWebhook = async (req, res) => {
 };
 
 module.exports = {
-	postHandlerPayment,
-	postHandlerWebhook,
+	getHandleAllCompras,
+	getAllComprasById,
 };
