@@ -8,7 +8,7 @@ const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET}= process.env
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "https://servidor-libreria.onrender.com/auth/google/callback", // Agrega 'http:' antes de '//localhost'
+  callbackURL: "http://localhost:3001/auth/google/callback", // Agrega 'http:' antes de '//localhost'
   passReqToCallback: true,
 },
 function(request, accessToken, refreshToken, profile, done) {

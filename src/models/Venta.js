@@ -1,13 +1,13 @@
 const { DataTypes } = require("sequelize");
 
-module.exports = buyModel = (sequelize) => {
+module.exports = ventaModel = (sequelize) => {
 	sequelize.define(
-		"Buy",
+		"Venta",
 		{
 			id: {
 				type: DataTypes.STRING,
 				primaryKey: true,
-			},		
+			},
 			purchaseDate: {
 				type: DataTypes.DATE,
 				allowNull: true,

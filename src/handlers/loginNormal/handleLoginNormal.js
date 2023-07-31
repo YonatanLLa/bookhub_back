@@ -23,7 +23,7 @@ const loginNormal = async (req, res) => {
     }
 
     const token = await  generaJsonWebToken(user.id, user.email);
-    //console.log(token)
+    // console.log(token)
     return res.status(200).json({accesoWJT: token})
 
    } catch (error) {

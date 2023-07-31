@@ -1,50 +1,77 @@
 const mercadopago = require("mercadopago");
+const { Venta, User } = require("../../db.js");
+require("dotenv").config();
 
-const createPayment = async (totalAmount, title, quantity, item_id) => {
+const { URL_BACK, URL_fRONT, URL_TOKEN } = process.env;
+
+const createPayment = async (products, totalPrice, title, userid) => {
 	mercadopago.configure({
-		access_token:
-			"TEST-720103210760998-062018-26bb891f51d99b0b8cd420627bbe27f2-1404207396",
+		access_token: `${URL_TOKEN}`,
 	});
-	const result = await mercadopago.preferences.create({
+
+	const preference = {
 		items: [
 			{
-				title: "Test",
+				title: title,
 				quantity: 1,
 				currency_id: "ARS",
-				unit_price: totalAmount,
+				unit_price: totalPrice,
 			},
 		],
 		back_urls: {
-			success: "http://localhost:5173/payment/failure",
-			failure: "http://localhost:3000/payment/failure",
-			pending: "http://localhost:3000/payment/pending",
+			success: `${URL_fRONT}/home`,
+			failure: `${URL_fRONT}/carrito`,
+			pending: `${URL_fRONT}/carrito`,
 		},
-		notification_url: "https://4b30-181-66-151-71.ngrok.io",
+		binary_mode: true,
+		notification_url: `${URL_BACK}/webhook`,
+	};
+	const paymentPreference = await mercadopago.preferences.create(preference);
+
+	const [newEntry, created] = await Venta.findOrCreate({
+		where: {
+			id: paymentPreference.body.id,
+		},
+		defaults: {
+			id: paymentPreference.body.id,
+			products: products,
+			purchaseDate: new Date(),
+		},
 	});
 
-	// console.log(result.data.body.init_point);
+	const user = await User.findByPk(userid);
+	await newEntry.setUser(user);
 
-	return result;
+	if (created) {
+		return {
+			preference_id: paymentPreference.body.id,
+			new: newEntry,
+			url: paymentPreference.body.init_point,
+		};
+	}
+	return paymentPreference;
 };
 
 const receiveWebhook = async (req) => {
-	try {
-		const { action, data } = req.body;
-		if (action === "payment.created") {
-			const paymentId = data.id;
+	console.log(req.query);
+	if (req.query.topic === "merchant_order") {
+		const mpResponse = await mercadopago.merchant_orders.findById(req.query.id);
+		const { preference_id, order_status } = mpResponse.response;
+		if (order_status === "payment_required") {
+			const response = await Venta.findByPk(preference_id);
 
-			// Consultar el estado del pago en Mercado Pago
-			const payment = await mercadopago.payment.findById(paymentId);
+			console.log(response, "response");
 
-			console.log(payment, "payment.... ");
-			// Actualizar el estado del pago en la base de datos según corresponda
+			const { send } = response.dataValues;
+			if (!send) {
+				await response.update({ send: true });
+			}
 		}
-	} catch (error) {
-		console.log(error.message);
-		res.status(400).json({ error: error.message });
 	}
+	return {
+		status: "success",
+	};
 };
-
 module.exports = {
 	createPayment,
 	receiveWebhook,

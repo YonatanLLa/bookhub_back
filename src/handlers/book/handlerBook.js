@@ -7,26 +7,7 @@ const { Book } = require("../../db")
 require("dotenv").config()
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
-//trae todo los libro
-// const getHandlerBook = async (req, res) => {
-// 	const { name } = req.query;
-// 	try {
 
-// 		const { name } = req.query;
-// 		const books = await getAllBook();
-// 		if(name){
-// 			const response = books.filter((e)=> e.name.toLowerCase().includes(name.toLowerCase()))
-// 			if (response.length > 0) {
-// 				return res.status(200).json(response);
-// 			}
-// 			return res.status(200).json({msg: `No encontramos el lbro con el nombre ${name}`});
-// 		}
-// 	 	return res.status(200).json(books);
-// 	} catch (error) {
-// 		res.status(500).json(error);
-// 		console.log(error);
-// 	}
-// };
 const getHandlerBook = async (req, res) => {
 	const { name } = req.query;
 	try {
