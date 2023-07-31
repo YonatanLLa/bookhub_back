@@ -56,11 +56,11 @@ passport.authenticate('google', { failureRedirect: '/' }),
 	console.log("token-route", token)
 	console.log("token-route-req", req.user.token)
   // Aquí redireccionas al frontend con el token de acceso u otra información relevante
-  res.redirect('https://bookhub-pf-deploy.vercel.app/home?token=' + token); // Suponiendo que req.user.token contiene el token de acceso
+  res.redirect('https://book-hub-ten.vercel.app/home?token=' + token); // Suponiendo que req.user.token contiene el token de acceso
 }
 );
   
-routerGoogle.get("https://bookhub-pf-deploy.vercel.app/home", isLoggedIn, (req, res) => {
+routerGoogle.get("https://book-hub-ten.vercel.app/home", isLoggedIn, (req, res) => {
 	console.log("req.user", req.user);
 	res.send(`Hello ${req.user.name}`);
 });
