@@ -1,5 +1,12 @@
 const { Punctuation } = require("../../db");
 
+const allMyPuntuation = async (id) => {
+    const punctuations = await Punctuation.findAll({
+        where: { UserId: id }
+    });
+    return punctuations;
+}
+
 const idByPuntuation = async (id) => {
     const punctuations = await Punctuation.findAll({
         where: { BookId: id }
@@ -25,5 +32,6 @@ const createPuntuation = async (id, punctuation, userId) => {
 
 module.exports = {
     idByPuntuation,
-    createPuntuation
+    createPuntuation,
+    allMyPuntuation
 }
