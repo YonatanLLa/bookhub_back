@@ -1,13 +1,16 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
-const authorModel = require("./models/Author");
-const bookModel = require("./models/Book");
-const buyModel = require("./models/Buys");
-const genderModel = require("./models/Gender");
-const reviewModel = require("./models/Reviews");
-const userModel = require("./models/User");
-const buyBookModel = require("./models/BuyBook");
+
 const ventaModel = require("./models/Venta");
+const authorModel = require("./models/Author")
+const bookModel = require("./models/Book")
+const buyModel = require("./models/Buys")
+const genderModel = require("./models/Gender")
+const reviewModel = require("./models/Reviews")
+const userModel = require("./models/User")
+const buyBookModel = require("./models/BuyBook")
+const commentModel = require("./models/Comment")
+const punctuationModel = require("./models/Punctuation")
 // const Reviews = require("./models/Reviews");
 
 const { PGDATABASE, PGHOST, PGPASSWORD, PGUSER, PGPORT } = process.env;
@@ -17,30 +20,43 @@ const sequelize = new Sequelize(
 	{
 		logging: false,
 		native: false,
-		// dialectOptions: {
-		// 	ssl: {
-		// 		require: true
-		// 	}
-		// }
+		dialectOptions: {
+			ssl: {
+				require: true
+			}
+		}
 	}
 );
 
-authorModel(sequelize);
-bookModel(sequelize);
-buyModel(sequelize);
-genderModel(sequelize);
-reviewModel(sequelize);
-userModel(sequelize);
-buyBookModel(sequelize);
+
 ventaModel(sequelize);
+authorModel(sequelize)
+bookModel(sequelize)
+buyModel(sequelize)
+genderModel(sequelize)
+reviewModel(sequelize)
+userModel(sequelize)
+buyBookModel(sequelize)
+commentModel(sequelize)
+punctuationModel(sequelize)
 
-
-const { User, Book, Author, Gender, Buy, Reviews, BuyBook, Venta } =
-	sequelize.models;
+const { User, Book, Author, Gender, Buy, Reviews, BuyBook, Comment, Punctuation } = sequelize.models;
 
 //relaciones con los modelos
 
 // relacion uno a mucho
+Book.hasMany(Punctuation)
+Punctuation.belongsTo(Book);
+
+User.hasMany(Punctuation)
+Punctuation.belongsTo(User);
+
+Book.hasMany(Comment)
+Comment.belongsTo(Book);
+
+User.hasMany(Comment)
+Comment.belongsTo(User);
+
 User.hasMany(Buy);
 Buy.belongsTo(User);
 
