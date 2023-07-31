@@ -16,6 +16,10 @@ module.exports = userModel = (sequelize) => {
 					len: [1, 25],
 				},
 			},
+			image: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
 			lastName: {
 				type: DataTypes.STRING,
 				allowNull: true,
