@@ -60,7 +60,7 @@ passport.authenticate('google', { failureRedirect: '/' }),
 }
 );
   
-routerGoogle.get("https://mybookhub.vercel.app/home", isLoggedIn, (req, res) => {
+routerGoogle.get("https://book-hub-front-end.vercel.app//home", isLoggedIn, (req, res) => {
 	console.log("req.user", req.user);
 	res.send(`Hello ${req.user.name}`);
 });
