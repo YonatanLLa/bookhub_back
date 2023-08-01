@@ -52,6 +52,11 @@ const filter = async (filters) => {
     }
   }
 
+   // Agregar la condición de disponibilidad (available > 0)
+   whereClause.available = {
+    [Op.gt]: 0,
+  };
+
   const result = await Book.findAll({ where: whereClause, include: [Author, Gender] });
   //console.log("<--->",result)
    return result;
