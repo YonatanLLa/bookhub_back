@@ -1,9 +1,14 @@
 const { Router } = require("express");
-const { handlePuntuation, handleCreatePuntuation, handleMyPuntuation } = require("../../handlers/punctuation/handlePunctuation");
+const { 
+       handlePuntuation, 
+       handleCreatePuntuation, 
+       handleMyPuntuation, 
+       handleTopPuntuation } = require("../../handlers/punctuation/handlePunctuation");
 
 const routerPuntuation = Router();
 
 routerPuntuation.get("/", handleMyPuntuation)
+routerPuntuation.get("/top", handleTopPuntuation)
 routerPuntuation.get("/:id", handlePuntuation)
 routerPuntuation.post("/", handleCreatePuntuation)
 
