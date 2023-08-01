@@ -6,6 +6,7 @@ const { JWT_SECRET } = process.env;
 const getHandleAllCompras = async (req, res) => {
 	try {
 		const token = req.headers.authorization;
+
 		if (!token) {
 			return res.status(401).json({ message: "Token no proporcionado" });
 		}

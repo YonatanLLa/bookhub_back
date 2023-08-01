@@ -5,6 +5,8 @@ const { JWT_SECRET } = process.env;
 
 const getHandlePerfil = async (req, res) => {
     const token = req.headers.authorization;
+
+    console.log(token);
 	
     if (!token) {
       return res.status(401).json({ message: 'Token no proporcionado' });
@@ -16,7 +18,7 @@ const getHandlePerfil = async (req, res) => {
       const tokenParts = token.split('Bearer').pop().trim();
       const tokenized = jwt.verify(tokenParts, JWT_SECRET);
        id = tokenized.userId;
-
+      console.log(id);
        const response = await myPerfil(id)
        return res.status(200).json(response) 
     } catch (error) {
@@ -53,7 +55,6 @@ const getHandleMyBuys = async (req, res) => {
 		if (!token) {
 		  return res.status(401).json({ message: 'Token no proporcionado' });
 		}
-	
 		// Verifica y decodifica el token para obtener el userId
 		let id;
 		try {
@@ -69,8 +70,31 @@ const getHandleMyBuys = async (req, res) => {
     }
 }
 
-module.exports = {
-    getHandlePerfil,
-    getHandleProduct,
-    getHandleMyBuys
+const handleEdithProfile = async (req, res) => {
+  const { name, lastname, image, email  } = req.body
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: 'Token no proporcionado' });
+  }
+  // Verifica y decodifica el token para obtener el userId
+  let id;
+  try {
+    const tokenParts = token.split('Bearer').pop().trim();
+    const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+    id = tokenized.userId;
+
+    console.log(id);
+    // const response = await myPerfil(id)
+  }
+  catch (error) {
+    console.log("error", error.message)
+    return res.status(400).json({error: error.message})
+  }
 }
+
+module.exports = {
+	getHandlePerfil,
+	getHandleProduct,
+	getHandleMyBuys,
+	handleEdithProfile,
+};

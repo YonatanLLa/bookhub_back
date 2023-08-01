@@ -1,9 +1,10 @@
 const { User, Book, Buy, Author, Gender } = require("../../db")
 
 const myPerfil = async (id) => {
-   const user = await User.findByPk(id,{
-    attributes: ["name", "email"]
-   })
+   const user = await User.findByPk(id, {
+			attributes: ["name", "lastName", "image", "email"],
+		});
+   console.log(user);
    return user;
 }
 

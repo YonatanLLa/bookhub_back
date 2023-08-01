@@ -6,5 +6,8 @@ const routerPerfil = Router()
 routerPerfil.get("/", getHandlePerfil)
 routerPerfil.get("/myBooks", getHandleProduct)
 routerPerfil.get("/buys", getHandleMyBuys)
+routerPerfil.get("/editar", getHandleMyBuys);
+
+
 
 module.exports = routerPerfil;
