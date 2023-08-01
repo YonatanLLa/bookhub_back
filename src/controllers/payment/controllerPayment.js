@@ -1,6 +1,7 @@
 const mercadopago = require("mercadopago");
 const { Venta, User } = require("../../db.js");
 require("dotenv").config();
+const { Sequelize } = require("sequelize");
 
 const { URL_BACK, URL_fRONT, URL_TOKEN } = process.env;
 
@@ -61,9 +62,23 @@ const receiveWebhook = async (req) => {
 		if (order_status === "payment_required") {
 			const response = await Venta.findByPk(preference_id);
 
+			//aqui me traigo los productos
+			const products = ventaResponse.products; 
+			const parsedProducts = JSON.parse(products);
+			
 			const { send } = response.dataValues;
 			if (!send) {
 				await response.update({ send: true });
+				//aqui actualiza el disponible
+				for (const product of parsedProducts) {
+					const bookId = product.book_id;
+					const quantity = product.quantity;
+			
+					await Book.update(
+					  { available: Sequelize.literal(`available - ${quantity}`) },
+					  { where: { id: bookId } }
+					);
+				  }
 			}
 			
 		}
