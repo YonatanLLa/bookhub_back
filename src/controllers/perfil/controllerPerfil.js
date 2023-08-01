@@ -8,6 +8,15 @@ const myPerfil = async (id) => {
    return user;
 }
 
+const editProfile = async (id, name, lastName, image) => {
+	const user = await User.findByPk(id);
+	user.name = name;
+	user.lastName = lastName;
+	user.image = image;
+	user.save();
+	return user;
+};
+
 const myProduct = async (id) => {
     const user = await Book.findAll({
         where: {venta_user_id: id},    
@@ -25,7 +34,8 @@ const myBuys = async (id) => {
 }
 
 module.exports = {
-    myPerfil,
-    myProduct,
-    myBuys
-}
+	myPerfil,
+	myProduct,
+	myBuys,
+	editProfile,
+};
