@@ -1,13 +1,20 @@
 const { Book, Author, Gender } = require("../../db");
+const { Op } =  require("sequelize")
 
 const getAllBook = async () => {
-	const bookAll = await Book.findAll({
-		include:[ { model: Author, attributes: ["id","name"]}, {model: Gender, attributes: ["id","name"]}]
-	});
-	if (!bookAll) {
-		throw new Error("No book found");
-	}
-	return bookAll;
+    const bookAll = await Book.findAll({
+        where: {
+            available: {
+                [Op.gt]: 0 // Filtrar los libros cuya disponibilidad sea mayor que 0
+            }
+        },
+        include: [{ model: Author, attributes: ["id", "name"] }, { model: Gender, attributes: ["id", "name"] }]
+    });
+
+    if (!bookAll) {
+        throw new Error("No book found");
+    }
+    return bookAll;
 };
 
 const postControllerBook = async (
