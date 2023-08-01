@@ -73,14 +73,13 @@ const receiveWebhook = async (req) => {
 				for (const product of parsedProducts) {
 					const bookId = product.book_id;
 					const quantity = product.quantity;
-			
+			console.log("bookId", bookId, "quantity", quantity)
 					await Book.update(
 					  { available: Sequelize.literal(`available - ${quantity}`) },
 					  { where: { id: bookId } }
 					);
 				  }
 			}
-			
 		}
 	}
 	return {
