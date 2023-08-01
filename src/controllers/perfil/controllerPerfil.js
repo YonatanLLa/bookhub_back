@@ -1,11 +1,21 @@
 const { User, Book, Buy, Author, Gender } = require("../../db")
 
 const myPerfil = async (id) => {
-   const user = await User.findByPk(id,{
-    attributes: ["name", "email"]
-   })
+   const user = await User.findByPk(id, {
+			attributes: ["name", "lastName", "image", "email"],
+		});
+   console.log(user);
    return user;
 }
+
+const editProfile = async (id, name, lastName, image) => {
+	const user = await User.findByPk(id);
+	user.name = name;
+	user.lastName = lastName;
+	user.image = image;
+	user.save();
+	return user;
+};
 
 const myProduct = async (id) => {
     const user = await Book.findAll({
@@ -24,7 +34,8 @@ const myBuys = async (id) => {
 }
 
 module.exports = {
-    myPerfil,
-    myProduct,
-    myBuys
-}
+	myPerfil,
+	myProduct,
+	myBuys,
+	editProfile,
+};
