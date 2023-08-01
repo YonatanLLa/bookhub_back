@@ -19,10 +19,10 @@ const idByPuntuation = async (id) => {
     }
     const averagePunctuation = sum / punctuations.length;
 
-    // Agregamos el promedio al resultado
-    const result =  Math.ceil(averagePunctuation)
+    // Redondeamos el promedio a un decimal y convertimos nuevamente a número
+    const roundedAveragePunctuation = Number(averagePunctuation.toFixed(1));
 
-    return result;
+    return roundedAveragePunctuation;
 }
 
 const createPuntuation = async (id, punctuation, userId) => {
