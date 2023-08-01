@@ -63,7 +63,7 @@ const receiveWebhook = async (req) => {
 			const response = await Venta.findByPk(preference_id);
 
 			//aqui me traigo los productos
-			const products = ventaResponse.products; 
+			const products = response.products; 
 			const parsedProducts = JSON.parse(products);
 			
 			const { send } = response.dataValues;
