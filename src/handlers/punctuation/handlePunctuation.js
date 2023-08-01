@@ -1,7 +1,11 @@
 require("dotenv").config()
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
-const { createPuntuation, idByPuntuation, allMyPuntuation } = require("../../controllers/puntuation/controllerPuntuation");
+const { 
+    createPuntuation, 
+    idByPuntuation, 
+    allMyPuntuation, 
+    topPuntuation } = require("../../controllers/puntuation/controllerPuntuation");
 
 const handleMyPuntuation = async (req, res) => {
     const token = req.headers.authorization;
@@ -36,6 +40,16 @@ const handlePuntuation = async (req, res) => {
     }
 }
 
+const handleTopPuntuation = async (req, res) => {
+    try {
+        const response = await topPuntuation()
+        return res.status(200).json(response)
+    } catch (error) {
+        console.log(error.message)
+        return res.status(400).json({error: error.message})
+    }
+}
+
 const handleCreatePuntuation = async (req, res) => {
     const { punctuation, id } = req.body;
     const token = req.headers.authorization;
@@ -62,5 +76,6 @@ const handleCreatePuntuation = async (req, res) => {
 module.exports = {
     handlePuntuation,
     handleCreatePuntuation,
-    handleMyPuntuation 
+    handleMyPuntuation,
+    handleTopPuntuation
 }
