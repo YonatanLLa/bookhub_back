@@ -40,6 +40,11 @@ module.exports = userModel = (sequelize) => {
 				allowNull: false,
 				defaultValue: false,
 			},
+			isActive: {
+				type: DataTypes.BOOLEAN,
+				allowNull: false,
+				defaultValue: true,
+			  },
 			admin: {
 				type: DataTypes.BOOLEAN,
 				allowNull: false,
