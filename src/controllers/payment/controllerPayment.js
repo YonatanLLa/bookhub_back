@@ -1,7 +1,8 @@
 const mercadopago = require("mercadopago");
-const { Venta, User } = require("../../db.js");
+const { Venta, User, Book } = require("../../db.js");
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
+const { default: axios } = require("axios");
 
 const { URL_BACK, URL_fRONT, URL_TOKEN } = process.env;
 
@@ -54,31 +55,24 @@ const createPayment = async (products, totalPrice, title, userid) => {
 };
 
 const receiveWebhook = async (req) => {
-
-
 	if (req.query.topic === "merchant_order") {
 		const mpResponse = await mercadopago.merchant_orders.findById(req.query.id);
 		const { preference_id, order_status } = mpResponse.response;
 		if (order_status === "payment_required") {
 			const response = await Venta.findByPk(preference_id);
-
-			//aqui me traigo los productos
-			const products = response.products; 
-			const parsedProducts = JSON.parse(products);
-			
+			const products = response.products;
 			const { send } = response.dataValues;
 			if (!send) {
 				await response.update({ send: true });
-				//aqui actualiza el disponible
-				for (const product of parsedProducts) {
-					const bookId = product.book_id;
-					const quantity = product.quantity;
-			console.log("bookId", bookId, "quantity", quantity)
-					await Book.update(
-					  { available: Sequelize.literal(`available - ${quantity}`) },
-					  { where: { id: bookId } }
-					);
-				  }
+				for (const product of products) {
+					const book = await Book.findByPk(product.item_id);
+					if (book) {
+						const newAvailable = book.available - product.quantity;
+						console.log(newAvailable, "newAvailable");
+						const available = Math.max(0, newAvailable);
+						await book.update({ available });
+					}
+				}
 			}
 		}
 	}
