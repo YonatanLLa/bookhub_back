@@ -30,7 +30,12 @@ module.exports = bookModel = (sequelize) => {
     releaseDate: {
         type: DataTypes.DATEONLY,
         allowNull: false,
-    }
+    },
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      }
   },{
     paranoid: true,
   });
