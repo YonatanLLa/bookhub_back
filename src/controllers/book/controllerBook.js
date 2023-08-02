@@ -6,7 +6,8 @@ const getAllBook = async () => {
         where: {
             available: {
                 [Op.gt]: 0 // Filtrar los libros cuya disponibilidad sea mayor que 0
-            }
+            },
+			isActive: true
         },
         include: [{ model: Author, attributes: ["id", "name"] }, { model: Gender, attributes: ["id", "name"] }]
     });
