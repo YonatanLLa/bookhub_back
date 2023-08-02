@@ -41,10 +41,11 @@ const getHandleAllComment= async (req, res) => {
 //crea los comentario del libro
 const postHandleComment = async (req, res) => {
     const { comment, id } = req.body;
+    console.log(comment, id);
     const token = req.headers.authorization;
 	
     if (!token) {
-      console.log("no ahi token")
+      console.log(token)
       return res.status(401).json({ message: 'Token no proporcionado' });
     }
     // Verifica y decodifica el token para obtener el userId
@@ -55,6 +56,7 @@ const postHandleComment = async (req, res) => {
       userId = tokenized.userId;
         
       const response = await createReviews( id, comment, userId)
+      console.log(response);
       return res.status(200).json(response)
     } catch (error) {
         console.log(error.message)
