@@ -1,10 +1,13 @@
-const { User } = require("../../db")
+const { User, Book } = require("../../db")
 
+// eliminar usuario
 const deletedUser = async (id) => {
     const deletedUser = await User.destroy({ where: { id: id } })
     console.log(deletedUser)
     return deletedUser;
 }
+
+// supender usuario
 const suspendUser = async (id) => {
     const suspendUser = await User.findByPk(id);
     if(suspendUser.isActive === true){
@@ -13,6 +16,8 @@ const suspendUser = async (id) => {
     }
     return false;
 }
+
+// aquita suspencion del usuario
 const unSuspendUser = async (id) => {
     const unsuspendUser = await User.findByPk(id);
     if(unsuspendUser.isActive === false){
@@ -22,8 +27,29 @@ const unSuspendUser = async (id) => {
     return false;
 }
 
+//
+const suspenBook = async (id) => {
+    const suspendBook = await Book.findByPk(id);
+    if(suspendBook.isActive === true){
+       await suspendBook.update({isActive: false})
+       return true
+    }
+    return false;
+}
+//
+const unSuspenBook = async (id) => {
+    const unsuspendBook = await Book.findByPk(id);
+    if(unsuspendBook.isActive === false){
+       await unsuspendBook.update({isActive: true})
+       return true
+    }
+    return false;
+}
+
 module.exports = {
     deletedUser,
     suspendUser,
-    unSuspendUser
+    unSuspendUser,
+    suspenBook,
+    unSuspenBook
 }

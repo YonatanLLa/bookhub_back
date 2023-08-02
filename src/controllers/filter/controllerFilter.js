@@ -57,6 +57,8 @@ const filter = async (filters) => {
     [Op.gt]: 0,
   };
 
+  whereClause.isActive = true
+
   const result = await Book.findAll({ where: whereClause, include: [Author, Gender] });
   //console.log("<--->",result)
    return result;
