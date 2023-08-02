@@ -55,10 +55,16 @@ passport.authenticate('google', { failureRedirect: '/' }),
 	const token = generaJsonWebToken(req.user.id, req.user.email) 
 	console.log("token-route", token)
 	console.log("token-route-req", req.user.token)
-  // Aquí redireccionas al frontend con el token de acceso u otra información relevante
-  res.redirect('https://mybookhub.vercel.app/home?token=' + token); // Suponiendo que req.user.token contiene el token de acceso
-}
-);
+	if(req.user.isActive === true){
+		const token = generaJsonWebToken(req.user.id, req.user.email) 
+		//console.log("token-route", token)
+		console.log("token-route-req", req.user)
+		// Aquí redireccionas al frontend con el token de acceso u otra información relevante
+	    res.redirect('https://mybookhub.vercel.app/home?token=' + token); // Suponiendo que req.user.token contiene el token de acceso
+	}else{
+		res.redirect('https://mybookhub.vercel.app/home');
+	}
+});
   
 routerGoogle.get("https://mybookhub.vercel.app/home", isLoggedIn, (req, res) => {
 	console.log("req.user", req.user);

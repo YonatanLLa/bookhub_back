@@ -11,7 +11,12 @@ const loginNormal = async (req, res) => {
 
     if (!user) {
         console.log("no ahi usuario")
-        return res.status(401).json({error: "no ahi usuario con ese email"});
+        return res.status(400).json({error: "no ahi usuario con ese email"});
+    }
+
+    if (!user.isActive) {
+        console.log("no esta activo")
+        return res.status(401).json({error: "el usuario no esta activo"});
     }
 
     // comparo contraseña ingresada con existente
