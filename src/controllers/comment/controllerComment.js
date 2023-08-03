@@ -5,6 +5,7 @@ const getAllMyComment = async (id) => {
         where: { UserId: id },
         attributes: ["id", "name", "comment"]
     });
+    console.log(response);
     return response;
 };
 

@@ -1,12 +1,11 @@
-const { User, Book, Buy, Author, Gender } = require("../../db")
+const { User, Book, Venta, Author, Gender } = require("../../db");
 
 const myPerfil = async (id) => {
-   const user = await User.findByPk(id, {
-			attributes: ["name", "lastName", "image", "email"],
-		});
-   console.log(user);
-   return user;
-}
+	const user = await User.findByPk(id, {
+		attributes: ["name", "lastName", "image", "email"],
+	});
+	return user;
+};
 
 const editProfile = async (id, name, lastName, image) => {
 	const user = await User.findByPk(id);
@@ -18,20 +17,25 @@ const editProfile = async (id, name, lastName, image) => {
 };
 
 const myProduct = async (id) => {
-    const user = await Book.findAll({
-        where: {venta_user_id: id},    
-        include:[ { model: Author, attributes: ["id","name"]}, {model: Gender, attributes: ["id","name"]}] 
-    })
-    return user;
-}
+	const user = await Book.findAll({
+		where: { venta_user_id: id },
+		include: [
+			{ model: Author, attributes: ["id", "name"] },
+			{ model: Gender, attributes: ["id", "name"] },
+		],
+	});
+	return user;
+};
 
 const myBuys = async (id) => {
-    console.log("id", id)
-    const user = await Buy.findAll({
-        where: {UserId: id}
-    })
-    return user;
-}
+	const user = await Venta.findAll({
+		where: { UserId: id },
+	});
+
+	console.log(user, "buys");
+
+	return user;
+};
 
 module.exports = {
 	myPerfil,
