@@ -9,7 +9,8 @@ const { handlerUserPublishedBooks } = require("../../handlers/user/handlerUserPu
 const { 
 	   handleSuspendUser, 
 	   handleDeleteUser, 
-	   handleUnsuspendUser 
+	   handleUnsuspendUser, 
+	   handleAdminUser
 	} = require("../../handlers/user/handleDarkboard");
 
 const routerUser = Router();
@@ -23,5 +24,7 @@ routerUser.post("/sign", postHandlerSign);
 routerUser.put("/:id/suspend", handleSuspendUser)
 routerUser.delete("/:id", handleDeleteUser);
 routerUser.put("/:id/unsuspend", handleUnsuspendUser);
+//convertir admin
+routerUser.put("/:id/admin", handleAdminUser);
 
 module.exports = routerUser;
