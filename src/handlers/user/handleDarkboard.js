@@ -1,8 +1,26 @@
 const { 
        suspendUser, 
        unSuspendUser, 
-       deletedUser
+       deletedUser,
+       adminUser
       } = require("../../controllers/darkboardAdmin/darkboradAdmin");
+
+//Convertir usuario a Admin
+const handleAdminUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const response = await adminUser(id)
+  
+      if (response) {
+        res.status(200).json({ message: "Usuario ya es Admin." })
+      } else {
+        res.status(401).json({ message: "Usuario no encontrado." })
+      }
+    } catch (error){
+      console.log(error.message);
+      res.status(400).json({error: error.message})
+    }
+  };
 
 //Eliminar usuario
 const handleDeleteUser = async (req, res) => {
@@ -59,4 +77,5 @@ module.exports = {
     handleDeleteUser,
     handleSuspendUser,
     handleUnsuspendUser,
+    handleAdminUser
 }

@@ -56,7 +56,7 @@ passport.authenticate('google', { failureRedirect: '/' }),
 	console.log("token-route", token)
 	console.log("token-route-req", req.user.token)
 	if(req.user.isActive === true){
-		const token = generaJsonWebToken(req.user.id, req.user.email) 
+		const token = generaJsonWebToken(req.user.id, req.user.email, req.user.admin) 
 		//console.log("token-route", token)
 		console.log("token-route-req", req.user)
 		// Aquí redireccionas al frontend con el token de acceso u otra información relevante

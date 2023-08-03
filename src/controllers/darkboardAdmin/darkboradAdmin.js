@@ -1,6 +1,16 @@
 const { User, Book } = require("../../db")
 
 // eliminar usuario
+const adminUser = async (id) => {
+    const response = await User.findByPk(id);
+    if(response.admin === false){
+        await response.update({admin: true})
+        return true;
+    }
+    return false;
+}
+
+// eliminar usuario
 const deletedUser = async (id) => {
     const deletedUser = await User.destroy({ where: { id: id } })
     console.log(deletedUser)
@@ -51,5 +61,6 @@ module.exports = {
     suspendUser,
     unSuspendUser,
     suspenBook,
-    unSuspenBook
+    unSuspenBook,
+    adminUser
 }
