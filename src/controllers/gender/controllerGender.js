@@ -1,4 +1,4 @@
-const { Gender } = require("../../db")
+const { Gender, Book } = require("../../db")
 
 //me traigo todo los genero
 const allGender = async () => {
@@ -18,4 +18,35 @@ const allGender = async () => {
  return result;
 }
 
-module.exports = allGender;
+//me crea el genero
+const postGender = async (name) => {
+   if (name) {
+      const result = await Gender.create({name})
+      return result;
+   }
+    return false
+}
+
+//me actualiza el genero
+const putGender = async (name, newName) => {
+      const result = await Gender.findOne({ where: {name}})
+      if (result) {
+         await result.update({name: newName})
+         await Book.update({ AuthorId: result.id }, { where: { AuthorId: result.id } });
+         return true
+      }
+      return false;
+}
+
+//me actualiza el genero
+const deleteGender = async (name) => {
+   const result = await Gender.destroy({ where: {name: name} })
+   return result;
+}
+
+module.exports = {
+   allGender,
+   postGender,
+   putGender,
+   deleteGender
+};
