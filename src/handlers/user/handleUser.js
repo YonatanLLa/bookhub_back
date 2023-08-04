@@ -5,8 +5,13 @@ const {
 const{ User } = require("../../db")
 
 const getHandlerUser = async (req, res) => {
+	const { email } = req.query;
 	try {
-	     const user =await User.findAll()
+		const user =await User.findAll()
+		if (email) {
+			const response = user.filter((e)=> e.email.toLowerCase().includes(email.toLowerCase()))
+			return res.status(200).json(response);
+		}
 		return res.status(201).json(user);
 	} catch (error) {
 		res.status(500).json({ error: error.message });

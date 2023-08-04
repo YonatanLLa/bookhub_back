@@ -27,9 +27,9 @@ const loginNormal = async (req, res) => {
         return res.status(401).json({ error: "esta mal la contraseña"});
     }
 
-    const token = await  generaJsonWebToken(user.id, user.email);
+    const token = await  generaJsonWebToken(user.id, user.email, user.admin);
     // console.log(token)
-    return res.status(200).json({accesoWJT: token})
+    return res.status(200).json({accesoWJT: token, admin: user.admin})
 
    } catch (error) {
     console.log(error.message)

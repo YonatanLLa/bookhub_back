@@ -56,12 +56,15 @@ passport.authenticate('google', { failureRedirect: '/' }),
 	console.log("token-route", token)
 	console.log("token-route-req", req.user.token)
 	if(req.user.isActive === true){
-		const token = generaJsonWebToken(req.user.id, req.user.email) 
+		const token = generaJsonWebToken(req.user.id, req.user.email, req.user.admin) 
 		//console.log("token-route", token)
-		console.log("token-route-req", req.user)
+		//console.log("token-route-req", req.user)
+		const obj = { token: token, admin: req.user.admin };
+		const objString = JSON.stringify(obj); // Convertir el objeto a una cadena JSON válida
+	
 		// Aquí redireccionas al frontend con el token de acceso u otra información relevante
-	    res.redirect('https://mybookhub.vercel.app/home?token=' + token); // Suponiendo que req.user.token contiene el token de acceso
-	}else{
+		res.redirect('https://mybookhub.vercel.app/home?token=' + encodeURIComponent(objString));
+	  }else{
 		res.redirect('https://mybookhub.vercel.app/home');
 	}
 });
