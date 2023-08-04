@@ -7,7 +7,9 @@ const{ User } = require("../../db")
 const getHandlerUser = async (req, res) => {
 	const { email } = req.query;
 	try {
-		const user =await User.findAll()
+		const user =await User.findAll({
+			order: [["name", "ASC"]],
+		})
 		if (email) {
 			const response = user.filter((e)=> e.email.toLowerCase().includes(email.toLowerCase()))
 			return res.status(200).json(response);
