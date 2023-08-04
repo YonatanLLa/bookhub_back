@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { allCompras } = require("../../controllers/compras/controllerCompras");
 const { Venta } = require("../../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
@@ -21,6 +22,16 @@ const getHandleAllCompras = async (req, res) => {
 			},
 		});
 		res.status(200).json(getAllcompra);
+	} catch (error) {
+		console.log(error.message);
+		res.status(400).json({ error: error.message });
+	}
+};
+
+const handleAllCompras = async (req, res) => {
+	try {
+		const response = await allCompras()
+		return res.status(200).json(response);
 	} catch (error) {
 		console.log(error.message);
 		res.status(400).json({ error: error.message });
@@ -54,4 +65,5 @@ const getAllComprasById = async (req, res) => {
 module.exports = {
 	getHandleAllCompras,
 	getAllComprasById,
+	handleAllCompras
 };
