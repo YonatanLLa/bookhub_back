@@ -1,4 +1,4 @@
-const { Comment, Book, User } = require("../../db")
+const { Comment, Book, User, Punctuation } = require("../../db")
 
 const getAllMyComment = async (id) => {
     const response = await Comment.findAll({
@@ -9,11 +9,48 @@ const getAllMyComment = async (id) => {
 };
 
 const getAllReviews = async (id) => {
-    const response = await Comment.findAll({
+    const resComment = await Comment.findAll({
         where: { BookId: id },
-        attributes: ["id", "name", "comment"]
+        attributes: ["id", "name", "comment", "UserId"]
     });
-    return response;
+    const resPunctuation = await Punctuation.findAll({
+        where: { BookId: id },
+        attributes: ["id", "punctuation", "UserId"]
+    });
+
+    // Combinar comentarios y puntuaciones por UserId
+    const combinedReviews = {};
+
+    resComment.forEach((comment) => {
+        if (!combinedReviews[comment.UserId]) {
+            combinedReviews[comment.UserId] = {
+                id: comment.id,
+                name: comment.name,
+                comment: comment.comment,
+                punctuation: null
+            };
+        } else {
+            combinedReviews[comment.UserId].comment = comment.comment;
+        }
+    });
+
+    resPunctuation.forEach((punctuation) => {
+        if (!combinedReviews[punctuation.UserId]) {
+            combinedReviews[punctuation.UserId] = {
+                id: null,
+                name: null,
+                comment: null,
+                punctuation: punctuation.punctuation
+            };
+        } else {
+            combinedReviews[punctuation.UserId].punctuation = punctuation.punctuation;
+        }
+    });
+
+    // Convertir el objeto combinado en un array de reviews
+    const combinedReviewsArray = Object.values(combinedReviews);
+
+    return combinedReviewsArray;
 };
 
 const createReviews = async (id, comment, userId) => {
