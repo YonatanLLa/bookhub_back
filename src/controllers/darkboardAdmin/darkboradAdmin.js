@@ -1,10 +1,40 @@
 const { User, Book } = require("../../db")
 
-// eliminar usuario
+// convertir usuario a admin
 const adminUser = async (id) => {
     const response = await User.findByPk(id);
     if(response.admin === false){
         await response.update({admin: true})
+        return true;
+    }
+    return false;
+}
+
+// convertir admin a usuario
+const userAdmin = async (id) => {
+    const response = await User.findByPk(id);
+    if(response.admin === true){
+        await response.update({admin: false})
+        return true;
+    }
+    return false;
+}
+
+// convertir usuario a vendedor
+const vendedorUser = async (id) => {
+    const response = await User.findByPk(id);
+    if(response.vendedor === false){
+        await response.update({vendedor: true})
+        return true;
+    }
+    return false;
+}
+
+// convertir vendedor a usuario 
+const userVendedor = async (id) => {
+    const response = await User.findByPk(id);
+    if(response.vendedor === true){
+        await response.update({vendedor: false})
         return true;
     }
     return false;
@@ -62,5 +92,8 @@ module.exports = {
     unSuspendUser,
     suspenBook,
     unSuspenBook,
-    adminUser
+    adminUser,
+    userAdmin,
+    vendedorUser,
+    userVendedor
 }

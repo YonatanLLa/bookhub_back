@@ -2,7 +2,10 @@ const {
        suspendUser, 
        unSuspendUser, 
        deletedUser,
-       adminUser
+       adminUser,
+       vendedorUser,
+       userVendedor,
+       userAdmin
       } = require("../../controllers/darkboardAdmin/darkboradAdmin");
 
 //Convertir usuario a Admin
@@ -13,6 +16,56 @@ const handleAdminUser = async (req, res) => {
   
       if (response) {
         res.status(200).json({ message: "Usuario ya es Admin." })
+      } else {
+        res.status(401).json({ message: "Usuario no encontrado." })
+      }
+    } catch (error){
+      console.log(error.message);
+      res.status(400).json({error: error.message})
+    }
+  };
+
+//Convertir Admin a usuario
+const handleUserAdmin = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const response = await userAdmin(id)
+  
+      if (response) {
+        res.status(200).json({ message: "Usuario ya es Admin." })
+      } else {
+        res.status(401).json({ message: "Usuario no encontrado." })
+      }
+    } catch (error){
+      console.log(error.message);
+      res.status(400).json({error: error.message})
+    }
+  };
+
+//Convertir usuario a vendedor
+const handleVendedorUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const response = await vendedorUser(id)
+  
+      if (response) {
+        res.status(200).json({ message: "Usuario ya es Vendedor." })
+      } else {
+        res.status(401).json({ message: "Usuario no encontrado." })
+      }
+    } catch (error){
+      console.log(error.message);
+      res.status(400).json({error: error.message})
+    }
+  };
+//Convertir  vendedor a usuario
+const handleUserVendedor = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const response = await userVendedor(id)
+  
+      if (response) {
+        res.status(200).json({ message: "Vendedor ya es Usuario" })
       } else {
         res.status(401).json({ message: "Usuario no encontrado." })
       }
@@ -77,5 +130,8 @@ module.exports = {
     handleDeleteUser,
     handleSuspendUser,
     handleUnsuspendUser,
-    handleAdminUser
+    handleAdminUser,
+    handleUserAdmin,
+    handleVendedorUser,
+    handleUserVendedor
 }
