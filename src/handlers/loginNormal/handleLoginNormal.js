@@ -11,12 +11,12 @@ const loginNormal = async (req, res) => {
 
     if (!user) {
         console.log("no ahi usuario")
-        return res.status(400).json({error: "no ahi usuario con ese email"});
+        return res.status(400).json({error: "No Hay Usuario Con Ese Email"});
     }
 
     if (!user.isActive) {
         console.log("no esta activo")
-        return res.status(401).json({error: "el usuario no esta activo"});
+        return res.status(401).json({error: "El Usuario Esta Suspendido"});
     }
 
     // comparo contraseña ingresada con existente
@@ -24,7 +24,7 @@ const loginNormal = async (req, res) => {
 
     if (!passwordValid) {
         //contraseña incorrecta
-        return res.status(401).json({ error: "esta mal la contraseña"});
+        return res.status(401).json({ error: "Esta Mal La Contraseña"});
     }
 
     const token = await  generaJsonWebToken(user.id, user.email, user.admin);
