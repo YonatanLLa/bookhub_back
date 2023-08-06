@@ -28,8 +28,8 @@ const loginNormal = async (req, res) => {
     }
 
     const token = await  generaJsonWebToken(user.id, user.email, user.admin);
-    // console.log(token)
-    return res.status(200).json({accesoWJT: token, admin: user.admin})
+    console.log(user)
+    return res.status(200).json({accesoWJT: token, admin: user.admin, vendedor: user.vendedor})
 
    } catch (error) {
     console.log(error.message)

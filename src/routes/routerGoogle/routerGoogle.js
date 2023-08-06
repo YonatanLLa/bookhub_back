@@ -59,7 +59,7 @@ passport.authenticate('google', { failureRedirect: '/' }),
 		const token = generaJsonWebToken(req.user.id, req.user.email, req.user.admin) 
 		//console.log("token-route", token)
 		//console.log("token-route-req", req.user)
-		const obj = { token: token, admin: req.user.admin };
+		const obj = { token: token, admin: req.user.admin, vendedor: user.vendedor };
 		const objString = JSON.stringify(obj); // Convertir el objeto a una cadena JSON válida
 	
 		// Aquí redireccionas al frontend con el token de acceso u otra información relevante
