@@ -6,7 +6,6 @@ const { JWT_SECRET } = process.env;
 // le trae todo los comentario de los libros
 const handleMyComment = async (req, res) => {
     const token = req.headers.authorization;
-	
     if (!token) {
       console.log("no ahi token")
       return res.status(401).json({ message: 'Token no proporcionado' });

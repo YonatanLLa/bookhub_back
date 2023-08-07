@@ -10,7 +10,10 @@ const {
 	   handleSuspendUser, 
 	   handleDeleteUser, 
 	   handleUnsuspendUser, 
-	   handleAdminUser
+	   handleAdminUser,
+	   handleVendedorUser,
+	   handleUserVendedor,
+	   handleUserAdmin
 	} = require("../../handlers/user/handleDarkboard");
 
 const routerUser = Router();
@@ -26,5 +29,9 @@ routerUser.delete("/:id", handleDeleteUser);
 routerUser.put("/:id/unsuspend", handleUnsuspendUser);
 //convertir admin
 routerUser.put("/:id/admin", handleAdminUser);
+routerUser.put("/:id/unadmin", handleUserAdmin);
+//convertir vendedor
+routerUser.put("/:id/vendedorUser", handleVendedorUser);
+routerUser.put("/:id/userVendedor", handleUserVendedor);
 
 module.exports = routerUser;

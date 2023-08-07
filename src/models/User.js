@@ -45,6 +45,11 @@ module.exports = userModel = (sequelize) => {
 				allowNull: false,
 				defaultValue: true,
 			  },
+			  vendedor: {
+				type: DataTypes.BOOLEAN,
+				allowNull: false,
+				defaultValue: false,
+			},
 			admin: {
 				type: DataTypes.BOOLEAN,
 				allowNull: false,
