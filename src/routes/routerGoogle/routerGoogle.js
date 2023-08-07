@@ -52,14 +52,12 @@ routerGoogle.get("/auth/google", (req, res) => {
 routerGoogle.get('/auth/google/callback',
 passport.authenticate('google', { failureRedirect: '/' }),
 (req, res) => {
-	const token = generaJsonWebToken(req.user.id, req.user.email) 
-	console.log("token-route", token)
-	console.log("token-route-req", req.user.token)
 	if(req.user.isActive === true){
 		const token = generaJsonWebToken(req.user.id, req.user.email, req.user.admin) 
+		console.log("token-route", token)
 		//console.log("token-route", token)
 		//console.log("token-route-req", req.user)
-		const obj = { token: token, admin: req.user.admin, vendedor: user.vendedor };
+		const obj = { token: token, admin: req.user.admin, vendedor: req.user.vendedor };
 		const objString = JSON.stringify(obj); // Convertir el objeto a una cadena JSON válida
 	
 		// Aquí redireccionas al frontend con el token de acceso u otra información relevante
