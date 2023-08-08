@@ -115,11 +115,22 @@ const getAllReviews = async (id) => {
 const createReviews = async (id, comment, userId) => {
     const book = await Book.findByPk(id)
     const user = await User.findByPk(userId)
+    console.log(book);
+    console.log(user);
     const name = user.name
+    const lastName = user.lastName;
+    const image = user.image
+
     if (!book) {
         return "Error"
     }
-    const comentario = await Comment.create({ name, comment, UserId: userId })
+    const comentario = await Comment.create({
+			name,
+			comment,
+			UserId: userId,
+			lastName,
+			image,
+		});
     await comentario.setBook(id)
     return comentario;
 }

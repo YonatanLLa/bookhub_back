@@ -13,6 +13,14 @@ module.exports = commentModel = (sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false
             },
+			lastName:{
+				type: DataTypes.STRING,
+				allowNull: true
+			},
+			image:{
+				type: DataTypes.STRING,
+				allowNull: true
+			},
 			comment:{
                 type: DataTypes.TEXT,
                 allowNull: false
