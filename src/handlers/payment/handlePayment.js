@@ -20,8 +20,6 @@ const postHandlerPayment = async (req, res) => {
 		const tokenized = jwt.verify(tokenParts, JWT_SECRET);
 		id = tokenized.userId;
 
-		console.log(id);
-
 		const response = await createPayment(products, totalPrice, title, id);
 		res.status(200).json(response);
 	} catch (error) {

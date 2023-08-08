@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { allCompras } = require("../../controllers/compras/controllerCompras");
-const { Venta } = require("../../db");
+const { Venta, Reviews } = require("../../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 
@@ -62,8 +62,40 @@ const getAllComprasById = async (req, res) => {
 	}
 };
 
+const getAllComprasReviews = async (req, res) => {
+	try {
+		const token = req.headers.authorization;
+
+		if (!token || !token.startsWith("Bearer ")) {
+			return res.status(401).json({ message: "Token no proporcionado" });
+		}
+
+		const tokenParts = token.replace("Bearer ", "").trim();
+
+		let id;
+		const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+		id = tokenized.userId;
+
+		const getAllcompra = await Venta.findAll({
+			where: {
+				UserId: id,
+				send: true,
+			},
+			attributes: ["products"], // Only fetch the 'products' field from the database
+		});
+
+		const productsList = getAllcompra.map((venta) => venta.products);
+		// console.log(productsList);
+		res.status(200).json(productsList);
+	} catch (error) {
+		console.log(error.message);
+		res.status(400).json({ error: error.message });
+	}
+};
+
 module.exports = {
 	getHandleAllCompras,
 	getAllComprasById,
-	handleAllCompras
+	handleAllCompras,
+	getAllComprasReviews,
 };
