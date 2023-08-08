@@ -18,13 +18,24 @@ module.exports = ventaModel = (sequelize) => {
 				},
 			},
 			products: {
-				type: DataTypes.JSONB, // Adjust the data type accordingly
+				type: DataTypes.JSONB, // Ajusta el tipo de datos según corresponda
 				allowNull: true,
+				get() {
+					const rawValue = this.getDataValue("products");
+					if (rawValue) {
+						return rawValue.map((product) => ({
+							...product,
+							review: false, // Nueva propiedad booleana en cada producto
+						}));
+					}
+					return [];
+				},
 			},
 			send: {
 				type: DataTypes.BOOLEAN,
 				defaultValue: false,
 			},
+		
 		},
 		{
 			paranoid: true,
