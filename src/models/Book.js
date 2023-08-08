@@ -35,7 +35,8 @@ module.exports = bookModel = (sequelize) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
-      }
+      },
+  
   },{
     paranoid: true,
   });

@@ -1,11 +1,29 @@
 const mercadopago = require("mercadopago");
-const { Venta, User } = require("../../db.js");
+const { Venta, User, Book } = require("../../db.js");
 require("dotenv").config();
-const { Sequelize } = require("sequelize");
 
 const { URL_BACK, URL_fRONT, URL_TOKEN } = process.env;
 
 const createPayment = async (products, totalPrice, title, userid) => {
+
+	const bookInstances = await Book.findAll({
+		attributes: ["venta_user_id", "id"],
+	});
+
+	const productsTotal = products?.map((product) => {
+		const matchingBookInstance = bookInstances.find(
+			(bookInstance) => bookInstance.dataValues.id === product.item_id
+		);
+
+		if (matchingBookInstance) {
+			return {
+				...product,
+				ventaId: matchingBookInstance.dataValues.venta_user_id,
+			};
+		}
+		return product;
+	});
+
 	mercadopago.configure({
 		access_token: `${URL_TOKEN}`,
 	});
@@ -35,13 +53,14 @@ const createPayment = async (products, totalPrice, title, userid) => {
 		},
 		defaults: {
 			id: paymentPreference.body.id,
-			products: products,
+			products: productsTotal,
 			purchaseDate: new Date(),
 		},
 	});
 
 	const user = await User.findByPk(userid);
 	await newEntry.setUser(user);
+
 
 	if (created) {
 		return {
@@ -54,31 +73,26 @@ const createPayment = async (products, totalPrice, title, userid) => {
 };
 
 const receiveWebhook = async (req) => {
-
-
 	if (req.query.topic === "merchant_order") {
 		const mpResponse = await mercadopago.merchant_orders.findById(req.query.id);
 		const { preference_id, order_status } = mpResponse.response;
+		console.log(mpResponse);
+
 		if (order_status === "payment_required") {
 			const response = await Venta.findByPk(preference_id);
-
-			//aqui me traigo los productos
-			const products = response.products; 
-			const parsedProducts = JSON.parse(products);
-			
+			const productsTotal = response.products;
 			const { send } = response.dataValues;
 			if (!send) {
 				await response.update({ send: true });
-				//aqui actualiza el disponible
-				for (const product of parsedProducts) {
-					const bookId = product.book_id;
-					const quantity = product.quantity;
-			console.log("bookId", bookId, "quantity", quantity)
-					await Book.update(
-					  { available: Sequelize.literal(`available - ${quantity}`) },
-					  { where: { id: bookId } }
-					);
-				  }
+				for (const product of productsTotal) {
+					const book = await Book.findByPk(product.item_id);
+					if (book) {
+						const newAvailable = book.available - product.quantity;
+						console.log(newAvailable, "newAvailable");
+						const available = Math.max(0, newAvailable);
+						await book.update({ available });
+					}
+				}
 			}
 		}
 	}
