@@ -33,7 +33,21 @@ const getHandlerBook = async (req, res) => {
 
 //cargar el libro en la base de dato
 const postHandlerBook = async (req, res) => {
-		const { name, image, description, price, available, releaseDate, GenderId, AuthorId } = req.body;
+		const {
+			name,
+			image,
+			description,
+			price,
+			available,
+			releaseDate,
+			GenderId,
+			AuthorId,
+			pages,
+			language
+		} = req.body;
+
+		console.log(name, image, description, price, available, releaseDate, GenderId, AuthorId, pages, language);
+		
 		const token = req.headers.authorization;
 	
 		if (!token) {
@@ -59,8 +73,12 @@ const postHandlerBook = async (req, res) => {
 		releaseDate,
 		GenderId,
 		AuthorId,
+		pages,
+		language,
 		id
 	);
+
+
 	res.status(201).json(book);
 };
 
