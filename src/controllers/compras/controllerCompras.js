@@ -12,44 +12,20 @@ const allCompras = async (userId,startOfWeek, endOfWeek) => {
             },
         },
     });
-    
+
     const purchaseDataByDayOfWeek = {};
     const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-    // Recorremos cada compra
     for (const compra of allcompra) {
         const purchaseDate = new Date(compra.purchaseDate);
-        const dayOfWeek = purchaseDate.getDay(); // 0 (Domingo) a 6 (Sábado)
+        const dayOfWeek = purchaseDate.getDay();
 
-        // Recorremos cada producto de la compra
         for (const product of compra.products) {
-            let productId;
-            
-            // Comprobamos si existe item_id o book_id en el producto
-            if (product.item_id !== undefined) {
-                productId = product.item_id;
-            } else if (product.book_id !== undefined) {
-                productId = product.book_id;
-            } else {
-                continue; // Salta a la próxima iteración si no hay ID válido
+            if (!purchaseDataByDayOfWeek[dayOfWeek]) {
+                purchaseDataByDayOfWeek[dayOfWeek] = 0;
             }
 
-            // Buscamos el libro relacionado con el producto
-            const book = await Book.findOne({
-                where: {
-                    id: productId,
-                    venta_user_id: userId, // Asegúrate de que el libro sea tuyo
-                },
-            });
-
-            if (book) {
-                if (!purchaseDataByDayOfWeek[dayOfWeek]) {
-                    purchaseDataByDayOfWeek[dayOfWeek] = 0;
-                }
-
-                // Sumamos el totalAmount al día correspondiente
-                purchaseDataByDayOfWeek[dayOfWeek] += product?.price;
-            }
+            purchaseDataByDayOfWeek[dayOfWeek] += product?.price || 0;
         }
     }
 
