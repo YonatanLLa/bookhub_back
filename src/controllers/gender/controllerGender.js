@@ -2,13 +2,6 @@ const { Gender, Book } = require("../../db")
 
 //me traigo todo los genero
 const allGender = async () => {
-   const gender = ["Acción", "Aventura", "Ciencia Ficción", "Misterio", "Suspenso", "Romance", "Terror"];
-   gender.forEach((element)=>{
-   // console.log(element)
-       Gender.findOrCreate({
-        where: {name: element}
-       })
-   }) 
    const response = await Gender.findAll({
     attributes: ["name"]
  })
@@ -32,7 +25,10 @@ const putGender = async (name, newName) => {
       const result = await Gender.findOne({ where: {name}})
       if (result) {
          await result.update({name: newName})
-         await Book.update({ AuthorId: result.id }, { where: { AuthorId: result.id } });
+         await Book.update(
+						{ GenderId: result.id },
+						{ where: { GenderId: result.id } }
+					);
          return true
       }
       return false;
