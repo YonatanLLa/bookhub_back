@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { allCompras } = require("../../controllers/compras/controllerCompras");
-const { Venta, Reviews } = require("../../db");
+const { Venta } = require("../../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 
@@ -30,7 +30,26 @@ const getHandleAllCompras = async (req, res) => {
 
 const handleAllCompras = async (req, res) => {
 	try {
-		const response = await allCompras()
+		const token = req.headers.authorization;
+
+		if (!token) {
+			return res.status(401).json({ message: "Token no proporcionado" });
+		}
+		let id;
+		const tokenParts = token.split("Bearer").pop().trim();
+		const tokenized = jwt.verify(tokenParts, JWT_SECRET);
+		id = tokenized.userId;
+
+		const today = new Date();
+        const startOfWeek = new Date(today);
+         startOfWeek.setHours(0, 0, 0, 0);
+         startOfWeek.setDate(today.getDate() - today.getDay()); // Establece el inicio de la semana (domingo)
+
+        const endOfWeek = new Date(startOfWeek.getTime() + 7 * 24 * 60 * 60 * 1000); // Fin de la semana (7 días después)
+
+console.log("star", startOfWeek,"end", endOfWeek);
+console.log("id", id);
+		const response = await allCompras(id,startOfWeek, endOfWeek)
 		return res.status(200).json(response);
 	} catch (error) {
 		console.log(error.message);
