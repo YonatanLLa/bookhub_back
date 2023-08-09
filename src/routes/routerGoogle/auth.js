@@ -21,6 +21,7 @@ function(request, accessToken, refreshToken, profile, done) {
         name: profile.name.givenName,
         lastName: profile.name.familyName,
         email: profile.email,
+        image: profile.picture
       });
       await avisoLogin(profile.email)// le llega el email
       done(null, newUser);
