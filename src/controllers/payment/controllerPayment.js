@@ -78,6 +78,7 @@ const receiveWebhook = async (req) => {
 
 		if (order_status === "payment_required") {
 			const response = await Venta.findByPk(preference_id);
+
 			const productsTotal = response.products;
 			const { send } = response.dataValues;
 			if (!send) {

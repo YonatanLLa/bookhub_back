@@ -25,10 +25,9 @@ const putGender = async (name, newName) => {
       const result = await Gender.findOne({ where: {name}})
       if (result) {
          await result.update({name: newName})
-         await Book.update(
-						{ GenderId: result.id },
-						{ where: { GenderId: result.id } }
-					);
+
+         await Book.update({ GenderId: result.id }, { where: { GenderId: result.id } });
+
          return true
       }
       return false;
