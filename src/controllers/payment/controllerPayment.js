@@ -1,11 +1,11 @@
 const mercadopago = require("mercadopago");
 const { Venta, User, Book } = require("../../db.js");
+const { avisoDeCompra, avisoAlVendedor } = require("../../email/email.js");
 require("dotenv").config();
 
 const { URL_BACK, URL_fRONT, URL_TOKEN } = process.env;
 
 const createPayment = async (products, totalPrice, title, userid) => {
-
 	const bookInstances = await Book.findAll({
 		attributes: ["venta_user_id", "id"],
 	});
@@ -61,7 +61,6 @@ const createPayment = async (products, totalPrice, title, userid) => {
 	const user = await User.findByPk(userid);
 	await newEntry.setUser(user);
 
-
 	if (created) {
 		return {
 			preference_id: paymentPreference.body.id,
@@ -76,7 +75,6 @@ const receiveWebhook = async (req) => {
 	if (req.query.topic === "merchant_order") {
 		const mpResponse = await mercadopago.merchant_orders.findById(req.query.id);
 		const { preference_id, order_status } = mpResponse.response;
-		console.log(mpResponse);
 
 		if (order_status === "payment_required") {
 			const response = await Venta.findByPk(preference_id);
@@ -85,6 +83,8 @@ const receiveWebhook = async (req) => {
 			const { send } = response.dataValues;
 			if (!send) {
 				await response.update({ send: true });
+				await avisoDeCompra(preference_id);
+				await avisoAlVendedor(preference_id);
 				for (const product of productsTotal) {
 					const book = await Book.findByPk(product.item_id);
 					if (book) {
