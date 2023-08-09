@@ -27,7 +27,9 @@ const postControllerBook = async (
 	releaseDate,
 	GenderId,
 	AuthorId,
-	id
+	pages,
+	language,
+	id,
 ) => {
 	if (!name || !image || !description || !price || !available || !releaseDate) {
 		throw new Error("All fields are required");
@@ -39,8 +41,10 @@ const postControllerBook = async (
 		price,
 		available,
 		releaseDate,
-		venta_user_id: id
-	});	
+		pages,
+		language,
+		venta_user_id: id,
+	});
 	await book.setGender(GenderId);
 	await book.setAuthor(AuthorId);
 	return book;
