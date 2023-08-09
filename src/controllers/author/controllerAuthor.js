@@ -2,6 +2,7 @@ const { Author, Book } = require("../../db")
 
 //me traigo todos los autores
 const allAuthor = async () => {
+
    const response = await Author.findAll({
       attributes: ["name"]
    })

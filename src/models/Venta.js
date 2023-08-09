@@ -35,7 +35,6 @@ module.exports = ventaModel = (sequelize) => {
 				type: DataTypes.BOOLEAN,
 				defaultValue: false,
 			},
-		
 		},
 		{
 			paranoid: true,
