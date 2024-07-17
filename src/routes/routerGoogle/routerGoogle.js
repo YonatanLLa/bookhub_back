@@ -5,9 +5,11 @@ const session = require('express-session');
 const passport = require('passport');
 const generaJsonWebToken = require("../../jwt/generajwt");
 require('./auth');
+const {GOOGLE_CLIENT_ID}= process.env
+console.log(GOOGLE_CLIENT_ID);
 
 const corsOptions = {
-	origin: '*',
+	origin: 'http://localhost:5173',
 	credentials: true, // Permitir el envío de cookies y credenciales
   };
   
@@ -30,10 +32,9 @@ routerGoogle.get("/auth/google", (req, res) => {
 	try {
 		const googleAuthUrl = "https://accounts.google.com/o/oauth2/v2/auth" +
 		  "?response_type=code" +
-		  "&redirect_uri=https://servidor-libreria.onrender.com/auth/google/callback" +
-		  "&scope= email profile" +
-		  "&client_id=582695265371-5c11lptg39sbffmv67tocl8lde8f47st.apps.googleusercontent.com";
-	  console.log("dd")
+		  "&redirect_uri=https://bookhubback.vercel.app/auth/google/callback" +
+		  "&scope= email profile" + 
+		  "&client_id=" + GOOGLE_CLIENT_ID;
 		// Devuelve la URL de autenticación de Google al cliente
 		res.json({ authUrl: googleAuthUrl });
 	} catch (error) {
