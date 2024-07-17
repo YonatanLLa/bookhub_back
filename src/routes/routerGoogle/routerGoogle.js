@@ -9,7 +9,7 @@ const {GOOGLE_CLIENT_ID}= process.env
 console.log(GOOGLE_CLIENT_ID);
 
 const corsOptions = {
-	origin: 'http://localhost:5173',
+	origin: '*', 
 	credentials: true, // Permitir el envío de cookies y credenciales
   };
   
